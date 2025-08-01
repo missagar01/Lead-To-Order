@@ -188,7 +188,7 @@ function FollowUp() {
   // Add this helper function after the other helper functions (around line 100)
 const formatItemQty = (itemQtyString) => {
   if (!itemQtyString) return ""
-  
+ 
   try {
     const items = JSON.parse(itemQtyString)
     return items
@@ -309,7 +309,7 @@ const formatItemQty = (itemQtyString) => {
               if (hasColumnK && isColumnLEmpty && shouldInclude) {
                 const followUpItem = {
                   // timestamp: row.c[50] ? formatDateToDDMMYYYY(row.c[50].v) : "", // Column A (index 0)
-                  timestamp: row.c[34] ? formatDateToDDMMYYYY(row.c[34].v) : "", // Column A (index 0)
+                  timestamp: row.c[35] ? formatDateToDDMMYYYY(row.c[35].v) : "", // Column A (index 0)
                   id: row.c[0] ? row.c[0].v : "",
                   leadId: row.c[1] ? row.c[1].v : "",
                   companyName: row.c[4] ? row.c[4].v : "",
@@ -317,13 +317,13 @@ const formatItemQty = (itemQtyString) => {
                   phoneNumber: row.c[5] ? row.c[5].v : "", // Added phone number from column F (index 5)
                   leadSource: row.c[3] ? row.c[3].v : "",
                   location: row.c[7] ? row.c[7].v : "",
-                  customerSay: row.c[31] ? row.c[31].v : "",
-                  enquiryStatus: row.c[32] ? row.c[32].v : "",
+                  customerSay: row.c[17] ? row.c[17].v : "",
+                  enquiryStatus: row.c[18] ? row.c[18].v : "",
                   createdAt: row.c[0] ? row.c[0].v : "",
                   nextCallDate: row.c[89] ? row.c[89].v : "", // Column CL (index 89) for date filtering
                   priority: determinePriority(row.c[3] ? row.c[3].v : ""),
                   assignedTo: assignedUser, // Add assigned user to the follow-up item
-                  itemQty: row.c[96] ? row.c[96].v : "",
+                  itemQty: row.c[22] ? row.c[22].v : "",
                 }
 
                 pendingFollowUpData.push(followUpItem)
@@ -351,22 +351,22 @@ const formatItemQty = (itemQtyString) => {
                 const followUpItem = {
                   timestamp: row.c[0] ? formatDateToDDMMYYYY(row.c[0].v) : "", // Column A (index 0)
                   leadNo: row.c[1] ? row.c[1].v : "",
-                  companyName: row.c[26] ? row.c[26].v : "", // Column AA (index 26)
-                  customerSay: row.c[2] ? row.c[2].v : "",
-                  status: row.c[3] ? row.c[3].v : "",
-                  enquiryReceivedStatus: row.c[4] ? row.c[4].v : "",
+                  companyName: row.c[2] ? row.c[2].v : "", // Column AA (index 26)
+                  customerSay: row.c[3] ? row.c[3].v : "",
+                  status: row.c[4] ? row.c[4].v : "",
+                  enquiryReceivedStatus: row.c[5] ? row.c[5].v : "",
                   enquiryReceivedDate: row.c[5] ? formatDateToDDMMYYYY(row.c[5] ? row.c[5].v : "") : "",
                   enquiryState: row.c[6] ? row.c[6].v : "",
                   projectName: row.c[7] ? row.c[7].v : "",
                   salesType: row.c[8] ? row.c[8].v : "",
                   requiredProductDate: row.c[9] ? formatDateToDDMMYYYY(row.c[9] ? row.c[9].v : "") : "",
-                  projectApproxValue: row.c[10] ? row.c[10].v : "",
-                  itemName1: row.c[11] ? row.c[11].v : "",
-                  quantity1: row.c[12] ? row.c[12].v : "",
-                  itemName2: row.c[13] ? row.c[13].v : "",
-                  quantity2: row.c[14] ? row.c[14].v : "",
-                  itemName3: row.c[15] ? row.c[15].v : "",
-                  quantity3: row.c[16] ? row.c[16].v : "",
+                  projectApproxValue: row.c[9] ? row.c[9].v : "",
+                  itemName1: row.c[10] ? row.c[10].v : "",
+                  quantity1: row.c[11] ? row.c[11].v : "",
+                  itemName2: row.c[12] ? row.c[12].v : "",
+                  quantity2: row.c[13] ? row.c[13].v : "",
+                  itemName3: row.c[14] ? row.c[14].v : "",
+                  quantity3: row.c[15] ? row.c[15].v : "",
                   itemName4: row.c[17] ? row.c[17].v : "",
                   quantity4: row.c[18] ? row.c[18].v : "",
                   itemName5: row.c[19] ? row.c[19].v : "",
@@ -1148,77 +1148,77 @@ const formatItemQty = (itemQtyString) => {
                                   Lead No.
                                 </th>
                               )}
-                              {visibleColumns.companyName && (
-                                <th className="px-3 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
-                                  Company Name
-                                </th>
-                              )}
                               {visibleColumns.customerSay && (
                                 <th className="px-3 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
-                                  Customer Say
+                                  What Did Customer Say
+                                </th>
+                              )}
+                              {visibleColumns.companyName && (
+                                <th className="px-3 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                                  Lead Status
                                 </th>
                               )}
                               {visibleColumns.status && (
                                 <th className="px-3 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
-                                  Status
+                                  Enquiry Received Status
                                 </th>
                               )}
                               {visibleColumns.enquiryStatus && (
                                 <th className="px-3 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
-                                  Enquiry Status
+                                  Enquiry Recieved Date
                                 </th>
                               )}
                               {visibleColumns.receivedDate && (
                                 <th className="px-3 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
-                                  Received Date
+                                  Enquiry Approach
                                 </th>
                               )}
                               {visibleColumns.state && (
                                 <th className="px-3 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
-                                  State
+                                  Enquiry Approximate value
                                 </th>
                               )}
                               {visibleColumns.projectName && (
                                 <th className="px-3 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
-                                  Project Name
+                                  Item/Qty
                                 </th>
                               )}
                               {visibleColumns.salesType && (
                                 <th className="px-3 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
-                                  Sales Type
+                                 Total Quantity
                                 </th>
                               )}
                               {visibleColumns.productDate && (
                                 <th className="px-3 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
-                                  Product Date
+                                  Next Action
                                 </th>
                               )}
                               {visibleColumns.projectValue && (
                                 <th className="px-3 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
-                                  Project Value
+                                  Next Call Date
                                 </th>
                               )}
                               {visibleColumns.item1 && (
                                 <th className="px-3 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
-                                  Item 1
+                                 Next Call Time
                                 </th>
                               )}
                               {visibleColumns.qty1 && (
                                 <th className="px-3 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
-                                  Qty 1
+                                  Company Name
                                 </th>
                               )}
                               {visibleColumns.item2 && (
                                 <th className="px-3 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
-                                  Item 2
+                                  Sales Cordination
                                 </th>
                               )}
                               {visibleColumns.qty2 && (
                                 <th className="px-3 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
-                                  Qty 2
+                                  Calling Says
                                 </th>
                               )}
-                              {visibleColumns.item3 && (
+                              {/* {visibleColumns.item3 && (
                                 <th className="px-3 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
                                   Item 3
                                 </th>
@@ -1267,7 +1267,7 @@ const formatItemQty = (itemQtyString) => {
   <th className="px-3 sm:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
     Item/Qty
   </th>
-)}
+)} */}
                             </tr>
                           </thead>
                           <tbody className="bg-white divide-y divide-gray-200">
@@ -1319,7 +1319,7 @@ const formatItemQty = (itemQtyString) => {
                                       </span>
                                     </td>
                                   )}
-                                  {visibleColumns.enquiryStatus && (
+                                  {/* {visibleColumns.enquiryStatus && (
                                     <td className="px-3 sm:px-4 py-3 sm:py-4 text-sm text-gray-500">
                                       <div
                                         className="max-w-[100px] sm:max-w-[120px] truncate"
@@ -1328,7 +1328,7 @@ const formatItemQty = (itemQtyString) => {
                                         {followUp.enquiryReceivedStatus}
                                       </div>
                                     </td>
-                                  )}
+                                  )} */}
                                   {visibleColumns.receivedDate && (
                                     <td className="px-3 sm:px-4 py-3 sm:py-4 text-sm text-gray-500 whitespace-nowrap">
                                       {followUp.enquiryReceivedDate}
@@ -1359,11 +1359,11 @@ const formatItemQty = (itemQtyString) => {
                                       {followUp.salesType}
                                     </td>
                                   )}
-                                  {visibleColumns.productDate && (
+                                  {/* {visibleColumns.productDate && (
                                     <td className="px-3 sm:px-4 py-3 sm:py-4 text-sm text-gray-500 whitespace-nowrap">
                                       {followUp.requiredProductDate}
                                     </td>
-                                  )}
+                                  )} */}
                                   {visibleColumns.projectValue && (
                                     <td className="px-3 sm:px-4 py-3 sm:py-4 text-sm text-gray-500 whitespace-nowrap">
                                       {followUp.projectApproxValue}
@@ -1414,7 +1414,7 @@ const formatItemQty = (itemQtyString) => {
                                       {followUp.quantity3}
                                     </td>
                                   )}
-                                  {visibleColumns.item4 && (
+                                  {/* {visibleColumns.item4 && (
                                     <td className="px-3 sm:px-4 py-3 sm:py-4 text-sm text-gray-500">
                                       <div
                                         className="max-w-[100px] sm:max-w-[120px] truncate"
@@ -1473,7 +1473,7 @@ const formatItemQty = (itemQtyString) => {
       {formatItemQty(followUp.itemQty)}
     </div>
   </td>
-)}
+)} */}
                                 </tr>
                               ))
                             ) : (

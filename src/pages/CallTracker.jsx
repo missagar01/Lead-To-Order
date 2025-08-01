@@ -393,7 +393,7 @@ const columnOptions = [
                   assignedTo: assignedUser, // Add assigned user to the tracker item
                   currentStage: row.c[32] ? row.c[32].v : "", // Column BF - Current Stage
                   // callingDate: row.c[90] ? formatDateToDDMMYYYY(row.c[90].v) : "", // Column CM - Calling Date
-                  callingDate: row.c[42] ? String(row.c[42].v).toLowerCase() : "", // Column CM - Calling Date 
+                  callingDate: row.c[57] ? String(row.c[57].v).toLowerCase() : "", // Column CM - Calling Date 
                   itemQty: row.c[22] ? row.c[22].v : "", 
                 }
 
@@ -435,7 +435,7 @@ if (historyData && historyData.table && historyData.table.rows) {
           valueWithTax: row.c[9] ? row.c[9].v : "", // Column J - Value With Tax
           quotationUpload: row.c[10] ? row.c[10].v : "", // Column K - Quotation Upload
           quotationRemarks: row.c[11] ? row.c[11].v : "", // Column L - Quotation Remarks
-          // validatorName: row.c[12] ? row.c[12].v : "", // Column M - Validator Name
+          validatorName: row.c[12] ? row.c[12].v : "", // Column M - Validator Name
           // sendStatus: row.c[13] ? row.c[13].v : "", // Column N - Send Status
           // validationRemark: row.c[14] ? row.c[14].v : "", // Column O - Validation Remark
           // faqVideo: row.c[15] ? row.c[15].v : "", // Column P - FAQ Video
@@ -443,26 +443,26 @@ if (historyData && historyData.table && historyData.table.rows) {
           // offerVideo: row.c[17] ? row.c[17].v : "", // Column R - Offer Video
           // productCatalog: row.c[18] ? row.c[18].v : "", // Column S - Product Catalog
           // productImage: row.c[19] ? row.c[19].v : "", // Column T - Product Image
-          nextCallDate: formatDateToDDMMYYYY(row.c[20] ? row.c[20].v : ""), // Column U - Next Call Date
-          nextCallTime: formatTimeTo12Hour(row.c[21] ? row.c[21].v : ""), // Column V - Next Call Time
-          orderStatus: row.c[22] ? row.c[22].v : "", // Column W - Is Order Received? Status
-          acceptanceVia: row.c[23] ? row.c[23].v : "", // Column X - Acceptance Via
-          paymentMode: row.c[24] ? row.c[24].v : "", // Column Y - Payment Mode
-          paymentTerms: row.c[25] ? row.c[25].v : "", // Column Z - Payment Terms
-          transportMode: row.c[26] ? row.c[26].v : "", // Column AA - Transport Mode
-          registrationFrom: row.c[27] ? row.c[27].v : "", // Column AB - Registration From
+          nextCallDate: formatDateToDDMMYYYY(row.c[13] ? row.c[13].v : ""), // Column U - Next Call Date
+          nextCallTime: formatTimeTo12Hour(row.c[14] ? row.c[14].v : ""), // Column V - Next Call Time
+          orderStatus: row.c[15] ? row.c[15].v : "", // Column W - Is Order Received? Status
+          acceptanceVia: row.c[16] ? row.c[16].v : "", // Column X - Acceptance Via
+          paymentMode: row.c[17] ? row.c[17].v : "", // Column Y - Payment Mode
+          paymentTerms: row.c[18] ? row.c[18].v : "", // Column Z - Payment Terms
+          transportMode: row.c[19] ? row.c[19].v : "", // Column AA - Transport Mode
+          registrationFrom: row.c[20] ? row.c[20].v : "", // Column AB - Registration From
           orderVideo: row.c[28] ? row.c[28].v : "", // Column AC - Order Video
-          acceptanceFile: row.c[29] ? row.c[29].v : "", // Column AD - Acceptance File
-          orderRemark: row.c[30] ? row.c[30].v : "", // Column AE - Remark
+          acceptanceFile: row.c[21] ? row.c[21].v : "", // Column AD - Acceptance File
+          orderRemark: row.c[22] ? row.c[22].v : "", // Column AE - Remark
           apologyVideo: row.c[31] ? row.c[31].v : "", // Column AF - Apology Video
-          reasonStatus: row.c[32] ? row.c[32].v : "", // Column AG - Reason Status
-          reasonRemark: row.c[33] ? row.c[33].v : "", // Column AH - Reason Remark
-          holdReason: row.c[34] ? row.c[34].v : "", // Column AI - Hold Reason
-          holdingDate: formatDateToDDMMYYYY(row.c[35] ? row.c[35].v : ""), // Column AJ - Holding Date
-          holdRemark: row.c[36] ? row.c[36].v : "", // Column AK - Hold Remark
+          reasonStatus: row.c[23] ? row.c[23].v : "", // Column AG - Reason Status
+          reasonRemark: row.c[24] ? row.c[24].v : "", // Column AH - Reason Remark
+          holdReason: row.c[25] ? row.c[25].v : "", // Column AI - Hold Reason
+          holdingDate: formatDateToDDMMYYYY(row.c[26] ? row.c[26].v : ""), // Column AJ - Holding Date
+          holdRemark: row.c[27] ? row.c[27].v : "", // Column AK - Hold Remark
           priority: determinePriority(row.c[2] ? row.c[2].v : ""), // Determine priority based on status
           // callingDate: formatDateToDDMMYYYY(row.c[41] ? row.c[41].v : ""), // Column AP - Calling Date
-          callingDate: row.c[41] ? String(row.c[41].v).toLowerCase() : "", // Column AP - Calling Date 
+          callingDate: row.c[29] ? String(row.c[29].v).toLowerCase() : "", // Column AP - Calling Date 
           assignedTo: assignedUser, // Add assigned user to the history item
           itemQty: row.c[28] ? row.c[28].v : "",
         }
@@ -505,11 +505,11 @@ if (historyData && historyData.table && historyData.table.rows) {
                   stage: "Pending", // Default stage
                   dueDate: "", // You might want to add logic to calculate due date
                   assignedTo: assignedUser, // Add assigned user to the tracker item
-                  currentStage: row.c[42] ? row.c[42].v : "", // Column AQ - Current Stage
+                  currentStage: row.c[15] ? row.c[15].v : "", // Column AQ - Current Stage
                   // callingDate: row.c[76] ? formatDateToDDMMYYYY(row.c[76].v) : "", // Column BY - Calling Date
-                  callingDate1: row.c[26] ? formatDateToDDMMYYYY(row.c[26].v) : "", // Column BY - Calling Date as text
+                  callingDate1: row.c[42] ? formatDateToDDMMYYYY(row.c[42].v) : "", // Column BY - Calling Date as text
                   
-                  callingDate: row.c[26] ? String(row.c[26].v).toLowerCase() : "", // Column BY - Calling Date as text
+                  callingDate: row.c[42] ? String(row.c[42].v).toLowerCase() : "", // Column BY - Calling Date as text
                   itemQty: row.c[11] ? row.c[11].v : "",
                 }
 
@@ -1439,13 +1439,13 @@ const filterCounts = calculateFilterCounts();
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quotation Remarks</th>
           )}
           {visibleColumns.validatorName && (
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quotation Validator Name</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Followup Status</th>
           )}
-          {visibleColumns.sendStatus && (
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quotation Send Status</th>
+          {/* {visibleColumns.sendStatus && (
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Next Call Date</th>
           )}
           {visibleColumns.validationRemark && (
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quotation Validation Remark</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Next Call Time</th>
           )}
           {visibleColumns.faqVideo && (
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Send FAQ Video</th>
@@ -1461,7 +1461,7 @@ const filterCounts = calculateFilterCounts();
           )}
           {visibleColumns.productImage && (
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Send Product Image</th>
-          )}
+          )} */}
           {visibleColumns.nextCallDate && (
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Next Call Date</th>
           )}
@@ -1484,20 +1484,20 @@ const filterCounts = calculateFilterCounts();
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Transport Mode</th>
           )}
           {visibleColumns.registrationFrom && (
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CONVEYED FOR REGISTRATION FORM</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PO Number</th>
           )}
-          {visibleColumns.orderVideo && (
+          {/* {visibleColumns.orderVideo && (
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Video</th>
-          )}
+          )} */}
           {visibleColumns.acceptanceFile && (
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acceptance File Upload</th>
           )}
           {visibleColumns.orderRemark && (
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Remark</th>
           )}
-          {visibleColumns.apologyVideo && (
+          {/* {visibleColumns.apologyVideo && (
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Lost Apology Video</th>
-          )}
+          )} */}
           {visibleColumns.reasonStatus && (
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">If No Then Get Relevant Reason Status</th>
           )}
@@ -1581,7 +1581,7 @@ const filterCounts = calculateFilterCounts();
               {visibleColumns.validatorName && (
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{tracker.validatorName}</td>
               )}
-              {visibleColumns.sendStatus && (
+              {/* {visibleColumns.sendStatus && (
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{tracker.sendStatus}</td>
               )}
               {visibleColumns.validationRemark && (
@@ -1601,7 +1601,7 @@ const filterCounts = calculateFilterCounts();
               )}
               {visibleColumns.productImage && (
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{tracker.productImage}</td>
-              )}
+              )} */}
               {visibleColumns.nextCallDate && (
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{tracker.nextCallDate}</td>
               )}
@@ -1626,9 +1626,9 @@ const filterCounts = calculateFilterCounts();
               {visibleColumns.registrationFrom && (
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{tracker.registrationFrom}</td>
               )}
-              {visibleColumns.orderVideo && (
+              {/* {visibleColumns.orderVideo && (
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{tracker.orderVideo}</td>
-              )}
+              )} */}
               {visibleColumns.acceptanceFile && (
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {tracker.acceptanceFile && (
@@ -1646,7 +1646,7 @@ const filterCounts = calculateFilterCounts();
               {visibleColumns.orderRemark && (
                 <td className="px-6 py-4 text-sm text-gray-500 max-w-[200px] truncate" title={tracker.orderRemark}>{tracker.orderRemark}</td>
               )}
-              {visibleColumns.apologyVideo && (
+              {/* {visibleColumns.apologyVideo && (
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {tracker.apologyVideo && (
                     <a href={tracker.apologyVideo} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
@@ -1654,7 +1654,7 @@ const filterCounts = calculateFilterCounts();
                     </a>
                   )}
                 </td>
-              )}
+              )} */}
               {visibleColumns.reasonStatus && (
                 <td className="px-6 py-4 text-sm text-gray-500 max-w-[200px] truncate" title={tracker.reasonStatus}>{tracker.reasonStatus}</td>
               )}

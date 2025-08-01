@@ -23,7 +23,7 @@ function DashboardMetrics() {
         setIsLoading(true)
         
         // FMS sheet - For total leads (column B) and pending follow-ups (column K not null and column L null)
-        const fmsUrl = "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=FMS"
+        const fmsUrl = "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=FMS"
         const fmsResponse = await fetch(fmsUrl)
         const fmsText = await fmsResponse.text()
         
@@ -34,7 +34,7 @@ function DashboardMetrics() {
         const fmsData = JSON.parse(fmsJsonData)
         
         // Make Quotation sheet - For quotations sent (count of rows in column B)
-        const quotationUrl = "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=Make Quotation"
+        const quotationUrl = "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=Make Quotation"
         const quotationResponse = await fetch(quotationUrl)
         const quotationText = await quotationResponse.text()
         
@@ -44,7 +44,7 @@ function DashboardMetrics() {
         const quotationJsonData = quotationText.substring(quotationJsonStart, quotationJsonEnd)
         const quotationData = JSON.parse(quotationJsonData)
 
-        const enquiryUrl1 = "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=Enquiry Tracker"
+        const enquiryUrl1 = "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=Enquiry Tracker"
         const enquiryResponse1 = await fetch(enquiryUrl1)
         const enquiryText1 = await enquiryResponse1.text()
         
@@ -55,7 +55,7 @@ function DashboardMetrics() {
         const enquiryData1 = JSON.parse(enquiryJsonData1)
         
         // Enquiry to Order sheet - For total enquiry and pending enquiry
-        const enquiryUrl = "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=ENQUIRY TO ORDER"
+        const enquiryUrl = "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=ENQUIRY TO ORDER"
         const enquiryResponse = await fetch(enquiryUrl)
         const enquiryText = await enquiryResponse.text()
         
@@ -78,7 +78,7 @@ function DashboardMetrics() {
           // For admin users, count all rows; for regular users, filter by their username in column CH (index 88)
           totalLeads = fmsData.table.rows.filter((row, index) => {
             // Get the assigned user 
-            const assignedUser = row.c && row.c[88] ? row.c[88].v : ""
+            const assignedUser = row.c && row.c[56] ? row.c[56].v : ""
             
             // Check if this row should be included based on user permissions
             const shouldInclude = isAdmin() || (currentUser && assignedUser === currentUser.username)
@@ -90,7 +90,7 @@ function DashboardMetrics() {
           // Count pending follow-ups with user filtering
           pendingFollowups = fmsData.table.rows.filter((row, index) => {
             // Get the assigned user 
-            const assignedUser = row.c && row.c[88] ? row.c[88].v : ""
+            const assignedUser = row.c && row.c[56] ? row.c[56].v : ""
             
             // Check if this row should be included based on user permissions
             const shouldInclude = isAdmin() || (currentUser && assignedUser === currentUser.username)
@@ -98,8 +98,8 @@ function DashboardMetrics() {
             // Filter for pending follow-ups
             return index >= 2 && 
                    row.c && 
-                   row.c[27] && row.c[27].v && 
-                   (!row.c[28] || !row.c[28].v) && 
+                   row.c[13] && row.c[13].v && 
+                   (!row.c[14] || !row.c[14].v) && 
                    shouldInclude
           }).length
         }
@@ -124,24 +124,24 @@ function DashboardMetrics() {
           ordersReceived = enquiryData1.table.rows.filter(row => {
             // Assuming the Enquiry Tracker sheet has a user assignment column (adjust index as needed)
             // Here, I'm assuming column AJ (index 35) contains the username
-            const assignedUser = row.c && row.c[35] ? row.c[35].v : ""
+            const assignedUser = row.c && row.c[28] ? row.c[28].v : ""
             
             // Check if this row should be included based on user permissions
             const shouldInclude = isAdmin() || (currentUser && assignedUser === currentUser.username)
             
             // Count rows where column W (index 22) = "yes"
             return row.c && 
-                   row.c[22] && 
-                   row.c[22].v && 
-                   row.c[22].v.toLowerCase() === "yes" &&
+                   row.c[15] && 
+                   row.c[15].v && 
+                   row.c[15].v.toLowerCase() === "yes" &&
                    shouldInclude
           }).length
         }
         
-        // Count from Enquiry to Order sheet with user filtering
+        // Count from Enquiry to Order sheet with user filtering - UPDATED TO START FROM ROW 7
         if (enquiryData && enquiryData.table && enquiryData.table.rows) {
-          // Count total enquiries with user filtering
-          totalEnquiry = enquiryData.table.rows.filter(row => {
+          // Count total enquiries with user filtering - Start from index 6 (row 7)
+          totalEnquiry = enquiryData.table.rows.filter((row, index) => {
             // Assuming the Enquiry to Order sheet has a user assignment column (adjust index as needed)
             // Here, I'm assuming column AQ (index 42) contains the username
             const assignedUser = row.c && row.c[42] ? row.c[42].v : ""
@@ -149,22 +149,23 @@ function DashboardMetrics() {
             // Check if this row should be included based on user permissions
             const shouldInclude = isAdmin() || (currentUser && assignedUser === currentUser.username)
             
-            // Count all rows with data in column A (index 0)
-            return row.c && row.c[0] && row.c[0].v && shouldInclude
+            // Count all rows starting from index 6 (row 7) with data in column B (index 1)
+            return index >= 6 && row.c && row.c[1] && row.c[1].v && shouldInclude
           }).length
           
-          // Count pending enquiries with user filtering
-          pendingEnquiry = enquiryData.table.rows.filter(row => {
+          // Count pending enquiries with user filtering - Start from index 6 (row 7)
+          pendingEnquiry = enquiryData.table.rows.filter((row, index) => {
             // Get the assigned user
-            const assignedUser = row.c && row.c[42] ? row.c[42].v : ""
+            const assignedUser = row.c && row.c[41] ? row.c[41].v : ""
             
             // Check if this row should be included based on user permissions
             const shouldInclude = isAdmin() || (currentUser && assignedUser === currentUser.username)
             
-            // Count pending enquiries where column AH (index 37) is not null and column AI (index 38) is null
-            return row.c && 
-                   row.c[37] && row.c[37].v && 
-                   (!row.c[38] || !row.c[38].v) &&
+            // Count pending enquiries starting from index 6 (row 7) where column M (index 12) is not null and column N (index 13) is null
+            return index >= 6 && 
+                   row.c && 
+                   row.c[12] && row.c[12].v && 
+                   (!row.c[13] || !row.c[13].v) &&
                    shouldInclude
           }).length
         }

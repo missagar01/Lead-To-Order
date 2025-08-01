@@ -23,7 +23,7 @@ const [creditLimitOptions, setCreditLimitOptions] = useState([])
         setIsLoadingDropdowns(true)
         
         // Fetch data from DROPDOWN sheet
-        const dropdownUrl = "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=DROPDOWN"
+        const dropdownUrl = "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=DROPDOWN"
         const response = await fetch(dropdownUrl)
         const text = await response.text()
         
@@ -146,7 +146,7 @@ setCreditLimitOptions(["10000", "25000", "50000", "100000"])
         setIsLoadingQuotations(true)
         
         // First try fetching from FMS sheet (for pending enquiries)
-        const fmsUrl = "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=FMS"
+        const fmsUrl = "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=FMS"
         const fmsResponse = await fetch(fmsUrl)
         const fmsText = await fmsResponse.text()
         
@@ -176,7 +176,7 @@ setCreditLimitOptions(["10000", "25000", "50000", "100000"])
         
         // If no matches found in FMS, try ENQUIRY TO ORDER sheet (for direct enquiries)
         if (matchingQuotations.length === 0) {
-          const enquiryUrl = "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=ENQUIRY TO ORDER"
+          const enquiryUrl = "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=ENQUIRY TO ORDER"
           const enquiryResponse = await fetch(enquiryUrl)
           const enquiryText = await enquiryResponse.text()
           
@@ -482,7 +482,7 @@ setCreditLimitOptions(["10000", "25000", "50000", "100000"])
   </select>
 </div>
 
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <label htmlFor="conveyedForRegistration" className="block text-sm font-medium text-gray-700">
                 CONVEYED FOR REGISTRATION FORM
               </label>
@@ -498,10 +498,10 @@ setCreditLimitOptions(["10000", "25000", "50000", "100000"])
                   <option key={index} value={option.toLowerCase()}>{option}</option>
                 ))}
               </select>
-            </div>
+            </div> */}
           </div>
 
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
   <label htmlFor="orderVideo" className="block text-sm font-medium text-gray-700">
     Offer No.
   </label>
@@ -515,7 +515,7 @@ setCreditLimitOptions(["10000", "25000", "50000", "100000"])
     <option value="yes">Yes</option>
     <option value="no">No</option>
   </select>
-</div>
+</div> */}
 
           <div className="space-y-2">
             <label htmlFor="acceptanceFile" className="block text-sm font-medium text-gray-700">
@@ -550,7 +550,7 @@ setCreditLimitOptions(["10000", "25000", "50000", "100000"])
         <div className="space-y-4 border p-4 rounded-md">
           <h4 className="font-medium">Order Lost Details</h4>
 
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <label htmlFor="apologyVideo" className="block text-sm font-medium text-gray-700">
               Order Lost Apology Video
             </label>
@@ -561,7 +561,7 @@ setCreditLimitOptions(["10000", "25000", "50000", "100000"])
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
               onChange={handleFileChange}
             />
-          </div>
+          </div> */}
 
           <div className="space-y-2">
             <label htmlFor="reasonStatus" className="block text-sm font-medium text-gray-700">

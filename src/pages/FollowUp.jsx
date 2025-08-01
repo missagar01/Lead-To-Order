@@ -264,7 +264,7 @@ const formatItemQty = (itemQtyString) => {
 
         // Fetch data from FMS sheet for Pending Follow-ups
         const pendingUrl =
-          "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=FMS"
+          "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=FMS"
         const pendingResponse = await fetch(pendingUrl)
         const pendingText = await pendingResponse.text()
 
@@ -277,7 +277,7 @@ const formatItemQty = (itemQtyString) => {
 
         // Fetch data from Leads Tracker sheet for History
         const historyUrl =
-          "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=Leads Tracker"
+          "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=Leads Tracker"
         const historyResponse = await fetch(historyUrl)
         const historyText = await historyResponse.text()
 
@@ -296,11 +296,11 @@ const formatItemQty = (itemQtyString) => {
           pendingData.table.rows.slice(0).forEach((row) => {
             if (row.c) {
               // Check if column K (index 10) has data and column L (index 11) is null
-              const hasColumnK = row.c[27] && row.c[27].v
-              const isColumnLEmpty = !row.c[28] || row.c[28].v === null || row.c[28].v === ""
+              const hasColumnK = row.c[13] && row.c[13].v
+              const isColumnLEmpty = !row.c[14] || row.c[14].v === null || row.c[14].v === ""
 
               // Get the assigned user
-              const assignedUser = row.c[88] ? row.c[88].v : ""
+              const assignedUser = row.c[72] ? row.c[72].v : ""
 
               // For admin users, include all rows; for regular users, filter by their username
               const shouldInclude = isAdmin() || (currentUser && assignedUser === currentUser.username)
@@ -309,7 +309,7 @@ const formatItemQty = (itemQtyString) => {
               if (hasColumnK && isColumnLEmpty && shouldInclude) {
                 const followUpItem = {
                   // timestamp: row.c[50] ? formatDateToDDMMYYYY(row.c[50].v) : "", // Column A (index 0)
-                  timestamp: row.c[50] ? formatDateToDDMMYYYY(row.c[50].v) : "", // Column A (index 0)
+                  timestamp: row.c[34] ? formatDateToDDMMYYYY(row.c[34].v) : "", // Column A (index 0)
                   id: row.c[0] ? row.c[0].v : "",
                   leadId: row.c[1] ? row.c[1].v : "",
                   companyName: row.c[4] ? row.c[4].v : "",

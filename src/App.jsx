@@ -46,7 +46,7 @@ function App() {
   const fetchUserData = async (username, userType) => {
     try {
       // Example: Fetch data from Google Sheet
-      const dataUrl = "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=Data"
+      const dataUrl = "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=Data"
       const response = await fetch(dataUrl)
       const text = await response.text()
       
@@ -81,7 +81,7 @@ function App() {
   const login = async (username, password) => {
     try {
       // Fetch user credentials from Google Sheet
-      const loginUrl = "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=Login"
+      const loginUrl = "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=Login"
       const response = await fetch(loginUrl)
       const text = await response.text()
       

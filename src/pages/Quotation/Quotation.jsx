@@ -8,7 +8,7 @@ import QuotationHeader from "./quotation-header"
 import QuotationForm from "./quotation-form"
 import QuotationPreview from "./quotation-preview"
 import { generatePDFFromData } from "./pdf-generator"
-import { getNextQuotationNumber } from "./quotation-service"
+import { getNextQuotationNumber } from "./quotation-service" // SIMPLIFIED: Only import getNextQuotationNumber
 import { useQuotationData } from "./use-quotation-data"
 
 function Quotation() {
@@ -67,7 +67,7 @@ function Quotation() {
       try {
         console.log("Fetching existing quotations...")
         const scriptUrl =
-          "https://script.google.com/macros/s/AKfycbzTPj_x_0Sh6uCNnMDi-KlwVzkGV3nC4tRF6kGUNA1vXG0Ykx4Lq6ccR9kYv6Cst108aQ/exec"
+          "https://script.google.com/macros/s/AKfycbyLTNpTAVKaVuGH_-GrVNxDOgXqbWiBYzdf8PQWWwIFhLiIz_1lT3qEQkl7BS1osfToGQ/exec"
         const response = await fetch(scriptUrl, {
           method: "POST",
           headers: {
@@ -101,7 +101,7 @@ function Quotation() {
     }
   }, [isRevising])
 
-  // Initialize quotation number
+  // SIMPLIFIED: Initialize quotation number - no company prefix needed
   useEffect(() => {
     const initializeQuotationNumber = async () => {
       try {
@@ -154,7 +154,7 @@ function Quotation() {
 
     try {
       const scriptUrl =
-        "https://script.google.com/macros/s/AKfycbzTPj_x_0Sh6uCNnMDi-KlwVzkGV3nC4tRF6kGUNA1vXG0Ykx4Lq6ccR9kYv6Cst108aQ/exec"
+        "https://script.google.com/macros/s/AKfycbyLTNpTAVKaVuGH_-GrVNxDOgXqbWiBYzdf8PQWWwIFhLiIz_1lT3qEQkl7BS1osfToGQ/exec"
       const response = await fetch(scriptUrl, {
         method: "POST",
         headers: {
@@ -309,7 +309,7 @@ const handleGenerateLink = async () => {
     const blob = new Blob([byteArray], { type: "application/pdf" });
 
     // Upload PDF to Google Drive (this creates a permanent copy)
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbzVseC0GMn77c4hbt-caHpWgb4zmh99VByIaNfReJjBsR4eUZ63uaLJ670c3p116t3lcQ/exec";
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbyLTNpTAVKaVuGH_-GrVNxDOgXqbWiBYzdf8PQWWwIFhLiIz_1lT3qEQkl7BS1osfToGQ/exec";
     const pdfFileName = `Quotation_${quotationData.quotationNo}.pdf`;
 
     const pdfResponse = await fetch(scriptUrl, {
@@ -438,7 +438,7 @@ const handleGenerateLink = async () => {
       const fileName = `Quotation_${finalQuotationNo}.pdf`
 
       const scriptUrl =
-        "https://script.google.com/macros/s/AKfycbzTPj_x_0Sh6uCNnMDi-KlwVzkGV3nC4tRF6kGUNA1vXG0Ykx4Lq6ccR9kYv6Cst108aQ/exec"
+        "https://script.google.com/macros/s/AKfycbyLTNpTAVKaVuGH_-GrVNxDOgXqbWiBYzdf8PQWWwIFhLiIz_1lT3qEQkl7BS1osfToGQ/exec"
 
       const pdfParams = {
         action: "uploadPDF",
@@ -624,6 +624,7 @@ const handleGenerateLink = async () => {
 
       alert("Quotation saved successfully with all items!")
 
+      // SIMPLIFIED: Reset to next simple QN number after saving
       const nextQuotationNumber = await getNextQuotationNumber()
       setQuotationData({
         quotationNo: nextQuotationNumber,
@@ -745,9 +746,9 @@ const handleGenerateLink = async () => {
             addSpecialOffer={addSpecialOffer}
             removeSpecialOffer={removeSpecialOffer}
             handleSpecialOfferChange={handleSpecialOfferChange}
-            setQuotationData={setQuotationData}   // ADD THIS LINE
-            hiddenColumns={hiddenColumns}         // ADD THIS LINE
-            setHiddenColumns={setHiddenColumns}   // ADD THIS LINE
+            setQuotationData={setQuotationData}
+            hiddenColumns={hiddenColumns}
+            setHiddenColumns={setHiddenColumns}
           />
           ) : (
             <QuotationPreview

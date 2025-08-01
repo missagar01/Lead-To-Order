@@ -14,7 +14,7 @@ export const useQuotationData = (initialSpecialDiscount = 0) => {
   })
 
   const [quotationData, setQuotationData] = useState({
-    quotationNo: "NBD-...",
+    quotationNo: "QN-...",
     date: new Date().toLocaleDateString("en-GB"),
     consignorState: "",
     consignorName: "",

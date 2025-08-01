@@ -15,7 +15,7 @@ function MakeQuotationForm({ enquiryNo, formData, onFieldChange }) {
         setIsLoading(true)
         
         // Fetch data from DROPDOWN sheet
-        const dropdownUrl = "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=DROPDOWN"
+        const dropdownUrl = "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=DROPDOWN"
         const response = await fetch(dropdownUrl)
         const text = await response.text()
         
@@ -59,7 +59,7 @@ useEffect(() => {
     
     try {
       // Fetch data from ENQUIRY TRACKER sheet
-      const trackerUrl = "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=ENQUIRY TRACKER"
+      const trackerUrl = "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=ENQUIRY TRACKER"
       const response = await fetch(trackerUrl)
       const text = await response.text()
       

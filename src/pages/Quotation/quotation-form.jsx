@@ -9,7 +9,7 @@ import TermsAndConditions from "./terms and conditions"
 import BankDetails from "./bank-details"
 import NotesSection from "./notes-section"
 import SpecialOfferSection from "./special-offer-section"
-import { getCompanyPrefix, getNextQuotationNumber } from "./quotation-service"
+import { getNextQuotationNumber } from "./quotation-service" // SIMPLIFIED: Only import getNextQuotationNumber
 
 const QuotationForm = ({
   quotationData,
@@ -36,9 +36,9 @@ const QuotationForm = ({
   addSpecialOffer,
   removeSpecialOffer,
   handleSpecialOfferChange,
-  setQuotationData, // ADD THIS LINE
-  hiddenColumns,    // ADD THIS LINE
-  setHiddenColumns, // ADD THIS LINE
+  setQuotationData,
+  hiddenColumns,
+  setHiddenColumns,
 }) => {
   const [dropdownData, setDropdownData] = useState({})
   const [stateOptions, setStateOptions] = useState(["Select State"])
@@ -60,7 +60,7 @@ const QuotationForm = ({
     const fetchDropdownData = async () => {
       try {
         const dropdownUrl =
-          "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=DROPDOWN"
+          "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=DROPDOWN"
         const dropdownResponse = await fetch(dropdownUrl)
         const dropdownText = await dropdownResponse.text()
 
@@ -193,7 +193,7 @@ useEffect(() => {
 
       // Fetch from FMS sheet
       const fmsUrl =
-        "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=FMS"
+        "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=FMS"
       const fmsResponse = await fetch(fmsUrl)
       const fmsText = await fmsResponse.text()
 
@@ -209,8 +209,8 @@ useEffect(() => {
             const leadNo = safeToString(row.c[1].v)
             
             // Check filtering conditions: BA (index 52) is not null and BB (index 53) is null
-            const baValue = row.c[52] ? safeToString(row.c[52].v) : ""
-            const bbValue = row.c[53] ? safeToString(row.c[53].v) : ""
+            const baValue = row.c[27] ? safeToString(row.c[27].v) : ""
+            const bbValue = row.c[28] ? safeToString(row.c[28].v) : ""
             
             if (leadNo && !leadNoOptionsData.includes(leadNo) && baValue !== "" && bbValue === "") {
               leadNoOptionsData.push(leadNo)
@@ -232,7 +232,7 @@ useEffect(() => {
 
       // Fetch from ENQUIRY TO ORDER sheet
       const enquiryUrl =
-        "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=ENQUIRY%20TO%20ORDER"
+        "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=ENQUIRY%20TO%20ORDER"
       const enquiryResponse = await fetch(enquiryUrl)
       const enquiryText = await enquiryResponse.text()
 
@@ -248,8 +248,8 @@ useEffect(() => {
             const leadNo = safeToString(row.c[1].v)
             
             // Check filtering conditions: AL (index 37) is not null and AM (index 38) is null
-            const alValue = row.c[37] ? safeToString(row.c[37].v) : ""
-            const amValue = row.c[38] ? safeToString(row.c[38].v) : ""
+            const alValue = row.c[12] ? safeToString(row.c[12].v) : ""
+            const amValue = row.c[13] ? safeToString(row.c[13].v) : ""
             
             if (leadNo && !leadNoOptionsData.includes(leadNo) && alValue !== "" && amValue === "") {
               leadNoOptionsData.push(leadNo)
@@ -258,11 +258,11 @@ useEffect(() => {
                 sheet: "ENQUIRY",
                 companyName: row.c[3] ? safeToString(row.c[3].v) : "", // Column D
                 address: row.c[6] ? safeToString(row.c[6].v) : "", // Column G
-                state: row.c[13] ? safeToString(row.c[13].v) : "", // Column N
+                // state: row.c[13] ? safeToString(row.c[13].v) : "", // Column N
                 contactName: row.c[5] ? safeToString(row.c[5].v) : "", // Column F
                 contactNo: row.c[4] ? safeToString(row.c[4].v) : "", // Column E
-                gstin: row.c[11] ? safeToString(row.c[11].v) : "", // Column L
-                shipTo: row.c[8] ? safeToString(row.c[8].v) : "", // Column I
+                // gstin: row.c[11] ? safeToString(row.c[11].v) : "", // Column L
+                // shipTo: row.c[8] ? safeToString(row.c[8].v) : "", // Column I
                 rowData: row.c, // Store full row data for items
               }
             }
@@ -290,7 +290,7 @@ useEffect(() => {
     const fetchProductData = async () => {
       try {
         const dropdownUrl =
-          "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=DROPDOWN"
+          "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=DROPDOWN"
         const response = await fetch(dropdownUrl)
         const text = await response.text()
 
@@ -350,10 +350,8 @@ useEffect(() => {
     fetchProductData()
   }, [])
 
-  // Function to handle quotation number updates
-  const handleQuotationNumberUpdate = (newQuotationNumber) => {
-    handleInputChange("quotationNo", newQuotationNumber)
-  }
+  // REMOVED: Function to handle quotation number updates - no longer needed
+  // as we don't want to change quotation number when selecting company/lead
 
   // Helper function to safely convert value to string
   const safeToString = (value) => {
@@ -361,7 +359,8 @@ useEffect(() => {
     return String(value)
   }
 
-  // NEW: Handle lead number selection and autofill
+  // FIXED: Handle lead number selection and autofill - NO quotation number change
+// FIXED: Handle lead number selection and autofill - NO quotation number change
 const handleLeadNoSelect = async (selectedLeadNo) => {
   if (!selectedLeadNo || selectedLeadNo === "Select Lead No." || !leadNoData[selectedLeadNo]) {
     return;
@@ -410,17 +409,6 @@ const handleLeadNoSelect = async (selectedLeadNo) => {
     }
   }
 
-  // CRITICAL: Get company prefix and update quotation number based on company name
-  try {
-    const companyPrefix = await getCompanyPrefix(companyName)
-    const newQuotationNumber = await getNextQuotationNumber(companyPrefix)
-
-    handleInputChange("quotationNo", newQuotationNumber)
-    console.log("Updated quotation number to:", newQuotationNumber, "with prefix:", companyPrefix)
-  } catch (error) {
-    console.error("Error updating quotation number from lead selection:", error)
-  }
-
   // Auto-fill items using the local handleAutoFillItems function
   try {
     await handleAutoFillItems(companyName)
@@ -436,48 +424,22 @@ const handleLeadNoSelect = async (selectedLeadNo) => {
 
   if (leadData.sheet === "FMS") {
     const row = leadData.rowData
-    const baValue = row[52] ? safeToString(row[52].v) : ""
-    const bbValue = row[53] ? safeToString(row[53].v) : ""
-    const biValue = row[60] ? safeToString(row[60].v) : ""
+    const baValue = row[27] ? safeToString(row[27].v) : "" // Column AB (index 27)
+    const bbValue = row[28] ? safeToString(row[28].v) : "" // Column AC (index 28)
 
-    console.log("FMS Lead - BA Value:", baValue, "BI Value:", biValue)
+    console.log("FMS Lead - BA Value:", baValue, "BB Value:", bbValue)
 
-    if (baValue !== "" && biValue === "") {
+    if (baValue !== "" && bbValue === "") {
       console.log("Processing FMS lead items...")
 
-      // Regular columns AN-AW (indices 39-48)
-      const itemColumns = [
-        { nameCol: 39, qtyCol: 40 }, // AN, AO
-        { nameCol: 41, qtyCol: 42 }, // AP, AQ
-        { nameCol: 43, qtyCol: 44 }, // AR, AS
-        { nameCol: 45, qtyCol: 46 }, // AT, AU
-        { nameCol: 47, qtyCol: 48 }, // AV, AW
-      ]
-
-      for (const { nameCol, qtyCol } of itemColumns) {
-        const itemName = row[nameCol] ? safeToString(row[nameCol].v).trim() : ""
-        const itemQty = row[qtyCol] ? safeToString(row[qtyCol].v) : ""
-
-        console.log(`Column ${nameCol} (Item Name):`, itemName)
-        console.log(`Column ${qtyCol} (Quantity):`, itemQty)
-
-        if (itemName !== "" && itemQty !== "") {
-          const qty = isNaN(Number(itemQty)) ? 1 : Number(itemQty)
-          autoItems.push({
-            name: itemName,
-            qty: qty,
-          })
-          console.log(`Added regular item from FMS: ${itemName}, qty: ${qty}`)
-        }
-      }
-
-      // JSON data from CS column (index 96)
-      const csValue = row[96] ? safeToString(row[96].v) : ""
-      console.log("CS Value from FMS lead:", csValue)
+      // ONLY: JSON data from column W (index 22) for FMS sheet
+      const wValue = row[22] ? safeToString(row[22].v) : ""
+      console.log("Column W JSON Value from FMS lead:", wValue)
       
-      if (csValue !== "" && csValue !== "null" && csValue !== "undefined") {
+      if (wValue !== "" && wValue !== "null" && wValue !== "undefined") {
         try {
-          const jsonData = JSON.parse(csValue)
+          const jsonData = JSON.parse(wValue)
+          console.log("Parsed JSON data from column W:", jsonData)
           if (Array.isArray(jsonData)) {
             jsonData.forEach((item) => {
               if (item.name && item.quantity !== undefined && item.quantity !== null) {
@@ -486,73 +448,38 @@ const handleLeadNoSelect = async (selectedLeadNo) => {
                   name: item.name,
                   qty: qty,
                 })
-                console.log(`Added JSON item from FMS: ${item.name}, qty: ${qty}`)
+                console.log(`Added JSON item from FMS column W: ${item.name}, qty: ${qty}`)
               }
             })
           }
         } catch (error) {
-          console.error("Error parsing JSON data from FMS:", error)
+          console.error("Error parsing JSON data from FMS column W:", error)
         }
       }
     } else {
-      console.log("FMS lead conditions not met - BA:", baValue, "BI:", biValue)
+      console.log("FMS lead conditions not met - BA:", baValue, "BB:", bbValue)
     }
   } else if (leadData.sheet === "ENQUIRY") {
     const row = leadData.rowData
-    const alValue = row[37] ? safeToString(row[37].v) : ""
-    const amValue = row[38] ? safeToString(row[38].v) : ""
-    const atValue = row[45] ? safeToString(row[45].v) : ""
+    const alValue = row[12] ? safeToString(row[12].v) : "" // Column M (index 12)
+    const amValue = row[13] ? safeToString(row[13].v) : "" // Column N (index 13)
 
-    console.log("ENQUIRY Lead - AL Value:", alValue, "AT Value:", atValue)
+    console.log("ENQUIRY Lead - AL Value:", alValue, "AM Value:", amValue)
 
     if (alValue !== "" && amValue === "") {
       console.log("Processing ENQUIRY lead items...")
 
-      // FIRST: Process regular columns R-AK (indices 17-36) - 10 items
-      const itemColumns = [
-        { nameCol: 17, qtyCol: 18 }, // R, S
-        { nameCol: 19, qtyCol: 20 }, // T, U
-        { nameCol: 21, qtyCol: 22 }, // V, W
-        { nameCol: 23, qtyCol: 24 }, // X, Y
-        { nameCol: 25, qtyCol: 26 }, // Z, AA
-        { nameCol: 27, qtyCol: 28 }, // AB, AC
-        { nameCol: 29, qtyCol: 30 }, // AD, AE
-        { nameCol: 31, qtyCol: 32 }, // AF, AG
-        { nameCol: 33, qtyCol: 34 }, // AH, AI
-        { nameCol: 35, qtyCol: 36 }, // AJ, AK
-      ]
+      // ONLY: JSON data from column L (index 11) for ENQUIRY sheet
+      const lValue = row[11] ? safeToString(row[11].v) : ""
+      console.log("Column L JSON Value from ENQUIRY lead:", lValue)
 
-      console.log("Processing regular columns R-AK...")
-      for (const { nameCol, qtyCol } of itemColumns) {
-        const itemName = row[nameCol] ? safeToString(row[nameCol].v).trim() : ""
-        const itemQty = row[qtyCol] ? safeToString(row[qtyCol].v) : ""
-
-        console.log(`Column ${nameCol} (Item Name):`, itemName)
-        console.log(`Column ${qtyCol} (Quantity):`, itemQty)
-
-        if (itemName !== "" && itemQty !== "") {
-          const qty = isNaN(Number(itemQty)) ? 1 : Number(itemQty)
-          autoItems.push({
-            name: itemName,
-            qty: qty,
-          })
-          console.log(`Added regular item from R-AK: ${itemName}, qty: ${qty}`)
-        }
-      }
-
-      console.log(`Regular items found: ${autoItems.length}`)
-
-      // SECOND: Process JSON data from CB column (index 79) - Continue from item 11+
-      const cbValue = row[79] ? safeToString(row[79].v) : ""
-      console.log("CB Value from lead selection:", cbValue)
-
-      if (cbValue !== "" && cbValue !== "null" && cbValue !== "undefined") {
+      if (lValue !== "" && lValue !== "null" && lValue !== "undefined") {
         try {
-          const jsonData = JSON.parse(cbValue)
-          console.log("Parsed JSON data from CB column:", jsonData)
+          const jsonData = JSON.parse(lValue)
+          console.log("Parsed JSON data from column L:", jsonData)
 
           if (Array.isArray(jsonData)) {
-            console.log(`Processing ${jsonData.length} JSON items from CB column...`)
+            console.log(`Processing ${jsonData.length} JSON items from column L...`)
             jsonData.forEach((item, index) => {
               console.log(`Processing JSON item ${index + 1}:`, item)
               if (item.name && item.quantity !== undefined && item.quantity !== null) {
@@ -561,25 +488,25 @@ const handleLeadNoSelect = async (selectedLeadNo) => {
                   name: item.name,
                   qty: qty,
                 })
-                console.log(`Added JSON item from CB: ${item.name}, qty: ${qty}`)
+                console.log(`Added JSON item from ENQUIRY column L: ${item.name}, qty: ${qty}`)
               } else {
                 console.log(`Skipped JSON item ${index + 1} - missing name or quantity`)
               }
             })
           } else {
-            console.log("CB data is not an array:", typeof jsonData)
+            console.log("Column L data is not an array:", typeof jsonData)
           }
         } catch (error) {
-          console.error("Error parsing JSON data from ENQUIRY CB column:", error)
-          console.log("Raw CB value that failed to parse:", cbValue)
+          console.error("Error parsing JSON data from ENQUIRY column L:", error)
+          console.log("Raw column L value that failed to parse:", lValue)
         }
       } else {
-        console.log("CB column is empty or null")
+        console.log("Column L is empty or null")
       }
 
       console.log(`Total items found for ENQUIRY lead: ${autoItems.length}`)
     } else {
-      console.log("ENQUIRY lead conditions not met - AL:", alValue, "AT:", atValue)
+      console.log("ENQUIRY lead conditions not met - AL:", alValue, "AM:", amValue)
     }
   }
 
@@ -654,7 +581,7 @@ const handleLeadNoSelect = async (selectedLeadNo) => {
   setIsItemsLoading(false); // Stop loading
 }
 
-  // Function to auto-fill items based on company selection
+  // FIXED: Function to auto-fill items based on company selection - NO quotation number change
   const handleAutoFillItems = async (companyName) => {
     if (!companyName || companyName === "Select Company") return
 
@@ -663,7 +590,7 @@ const handleLeadNoSelect = async (selectedLeadNo) => {
 
       // First try FMS sheet
       const fmsUrl =
-        "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=FMS"
+        "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=FMS"
       const fmsResponse = await fetch(fmsUrl)
       const fmsText = await fmsResponse.text()
 
@@ -763,7 +690,7 @@ const handleLeadNoSelect = async (selectedLeadNo) => {
         console.log("Not found in FMS, checking ENQUIRY TO ORDER sheet")
 
         const enquiryUrl =
-          "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=ENQUIRY%20TO%20ORDER"
+          "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=ENQUIRY%20TO%20ORDER"
         const enquiryResponse = await fetch(enquiryUrl)
         const enquiryText = await enquiryResponse.text()
 
@@ -925,7 +852,6 @@ const handleLeadNoSelect = async (selectedLeadNo) => {
             handleInputChange={handleInputChange}
             companyOptions={companyOptions}
             dropdownData={dropdownData}
-            onQuotationNumberUpdate={handleQuotationNumberUpdate}
             onAutoFillItems={handleAutoFillItems}
             showLeadNoDropdown={showLeadNoDropdown}
             setShowLeadNoDropdown={setShowLeadNoDropdown}
@@ -956,14 +882,6 @@ const handleLeadNoSelect = async (selectedLeadNo) => {
         handleInputChange={handleInputChange}
         hiddenFields={hiddenFields}
         toggleFieldVisibility={toggleFieldVisibility}
-      />
-
-      <SpecialOfferSection
-        quotationData={quotationData}
-        handleInputChange={handleInputChange}
-        addSpecialOffer={addSpecialOffer}
-        removeSpecialOffer={removeSpecialOffer}
-        handleSpecialOfferChange={handleSpecialOfferChange}
       />
 
       <NotesSection

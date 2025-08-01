@@ -323,7 +323,7 @@ const columnOptions = [
 
         // Fetch data from FMS sheet for Pending Call Trackers
         const pendingUrl =
-          "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=FMS"
+          "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=FMS"
         const pendingResponse = await fetch(pendingUrl)
         const pendingText = await pendingResponse.text()
 
@@ -336,7 +336,7 @@ const columnOptions = [
 
         // Fetch data from Enquiry Tracker sheet for History
         const historyUrl =
-          "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=Enquiry Tracker"
+          "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=Enquiry Tracker"
         const historyResponse = await fetch(historyUrl)
         const historyText = await historyResponse.text()
 
@@ -349,7 +349,7 @@ const columnOptions = [
 
         // Fetch data from ENQUIRY TO ORDER sheet for Direct Enquiry Pending
         const directEnquiryUrl =
-          "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=ENQUIRY TO ORDER"
+          "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=ENQUIRY TO ORDER"
         const directEnquiryResponse = await fetch(directEnquiryUrl)
         const directEnquiryText = await directEnquiryResponse.text()
 
@@ -368,9 +368,9 @@ const columnOptions = [
           // Skip the header row (index 0)
           pendingData.table.rows.slice(2).forEach((row, index) => {
             // Only show rows where column AJ (index 35) is not null and column AK (index 36) is null
-            if (row.c && row.c[52] && row.c[52].v && (!row.c[53] || !row.c[53].v)) {
+            if (row.c && row.c[27] && row.c[27].v && (!row.c[28] || !row.c[28].v)) {
               // Get the assigned user from column CC (index 88) like in the FollowUp component
-              const assignedUser = row.c[88] ? row.c[88].v : ""
+              const assignedUser = row.c[56] ? row.c[56].v : ""
 
               // For admin users, include all rows; for regular users, filter by their username
               const shouldInclude = isAdmin() || (currentUser && assignedUser === currentUser.username)
@@ -378,7 +378,7 @@ const columnOptions = [
               if (shouldInclude) {
                 const callTrackerItem = {
                   id: index + 1,
-                  timestamp: row.c[52] ? formatDateToDDMMYYYY(row.c[52].v) : "", // Column AB - Timestamp
+                  timestamp: row.c[41] ? formatDateToDDMMYYYY(row.c[41].v) : "", // Column AB - Timestamp
                   leadId: row.c[1] ? row.c[1].v : "", // Column B - Lead Number
                   receiverName: row.c[2] ? row.c[2].v : "", // Column C - Lead Receiver Name
                   leadSource: row.c[3] ? row.c[3].v : "", // Column D - Lead Source
@@ -391,10 +391,10 @@ const columnOptions = [
                   stage: "Pending", // Default stage
                   dueDate: "", // You might want to add logic to calculate due date
                   assignedTo: assignedUser, // Add assigned user to the tracker item
-                  currentStage: row.c[57] ? row.c[57].v : "", // Column BF - Current Stage
+                  currentStage: row.c[32] ? row.c[32].v : "", // Column BF - Current Stage
                   // callingDate: row.c[90] ? formatDateToDDMMYYYY(row.c[90].v) : "", // Column CM - Calling Date
-                  callingDate: row.c[90] ? String(row.c[90].v).toLowerCase() : "", // Column CM - Calling Date 
-                  itemQty: row.c[96] ? row.c[96].v : "", 
+                  callingDate: row.c[42] ? String(row.c[42].v).toLowerCase() : "", // Column CM - Calling Date 
+                  itemQty: row.c[22] ? row.c[22].v : "", 
                 }
 
                 pendingCallTrackerData.push(callTrackerItem)
@@ -481,11 +481,11 @@ if (historyData && historyData.table && historyData.table.rows) {
           directEnquiryPendingData = []
 
           // Skip the header row (index 0)
-          directEnquiryData.table.rows.slice(1).forEach((row, index) => {
+          directEnquiryData.table.rows.slice(6).forEach((row, index) => {
             // Only show rows where column AH (index 37) is not null and column AI (index 38) is null
-            if (row.c && row.c[37] && row.c[37].v && (!row.c[38] || !row.c[38].v)) {
+            if (row.c && row.c[12] && row.c[12].v && (!row.c[13] || !row.c[13].v)) {
               // Get the assigned user from column BX (index 75)
-              const assignedUser = row.c[75] ? row.c[75].v : ""
+              const assignedUser = row.c[41] ? row.c[41].v : ""
 
               // For admin users, include all rows; for regular users, filter by their username
               const shouldInclude = isAdmin() || (currentUser && assignedUser === currentUser.username)
@@ -493,12 +493,12 @@ if (historyData && historyData.table && historyData.table.rows) {
               if (shouldInclude) {
                 const directEnquiryItem = {
                   id: index + 1,
-                   timestamp: row.c[37] ? formatDateToDDMMYYYY(row.c[37].v) : "", // Column AL - Timestamp
+                   timestamp: row.c[26] ? formatDateToDDMMYYYY(row.c[26].v) : "", // Column AL - Timestamp
                   leadId: row.c[1] ? row.c[1].v : "", // Column B - Lead Number
                   receiverName: row.c[2] ? row.c[2].v : "", // Column C - Lead Receiver Name
                   leadSource: row.c[3] ? row.c[3].v : "", // Column D - Lead Source
                   salespersonName: row.c[41] ? row.c[41].v : "", // Column E - Salesperson Name
-                  companyName: row.c[42] ? row.c[42].v : "", // Column G - Company Name
+                  companyName: row.c[17] ? row.c[17].v : "", // Column G - Company Name
                   createdAt: row.c[0] ? formatDateToDDMMYYYY(row.c[0].v) : "", // Using date from column A
                   status: "Expected", // Default status for pending
                   priority: determinePriority(row.c[3] ? row.c[3].v : ""), // Determine priority based on source
@@ -507,10 +507,10 @@ if (historyData && historyData.table && historyData.table.rows) {
                   assignedTo: assignedUser, // Add assigned user to the tracker item
                   currentStage: row.c[42] ? row.c[42].v : "", // Column AQ - Current Stage
                   // callingDate: row.c[76] ? formatDateToDDMMYYYY(row.c[76].v) : "", // Column BY - Calling Date
-                  callingDate1: row.c[58] ? formatDateToDDMMYYYY(row.c[58].v) : "", // Column BY - Calling Date as text
+                  callingDate1: row.c[26] ? formatDateToDDMMYYYY(row.c[26].v) : "", // Column BY - Calling Date as text
                   
-                  callingDate: row.c[76] ? String(row.c[76].v).toLowerCase() : "", // Column BY - Calling Date as text
-                  itemQty: row.c[79] ? row.c[79].v : "",
+                  callingDate: row.c[26] ? String(row.c[26].v).toLowerCase() : "", // Column BY - Calling Date as text
+                  itemQty: row.c[11] ? row.c[11].v : "",
                 }
 
                 directEnquiryPendingData.push(directEnquiryItem)

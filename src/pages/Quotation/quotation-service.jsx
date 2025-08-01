@@ -10,15 +10,15 @@ import QuotationPreview from "./quotation-preview"
 import { generatePDFFromData } from "./pdf-generator"
 import { useQuotationData } from "./use-quotation-data"
 
-export const getNextQuotationNumber = async (companyPrefix = "NBD") => {
+// SIMPLIFIED: Simple QN number generation without company prefix
+export const getNextQuotationNumber = async () => {
   const scriptUrl =
-    "https://script.google.com/macros/s/AKfycbzTPj_x_0Sh6uCNnMDi-KlwVzkGV3nC4tRF6kGUNA1vXG0Ykx4Lq6ccR9kYv6Cst108aQ/exec"
+    "https://script.google.com/macros/s/AKfycbyLTNpTAVKaVuGH_-GrVNxDOgXqbWiBYzdf8PQWWwIFhLiIz_1lT3qEQkl7BS1osfToGQ/exec"
 
   try {
     const params = {
       sheetName: "Make Quotation",
       action: "getNextQuotationNumber",
-      companyPrefix: companyPrefix, // Pass the dynamic prefix
     }
 
     const urlParams = new URLSearchParams()
@@ -39,19 +39,21 @@ export const getNextQuotationNumber = async (companyPrefix = "NBD") => {
     if (result.success) {
       return result.nextQuotationNumber
     } else {
-      return `${companyPrefix}-001`
+      return "QN-001" // Default fallback
     }
   } catch (error) {
     console.error("Error getting next quotation number:", error)
-    return `${companyPrefix}-001`
+    return "QN-001" // Default fallback
   }
 }
+
+// REMOVED: getCompanyPrefix function - no longer needed for simple QN numbering
 
 // NEW: Function to get company prefix from FMS sheet
 // NEW: Enhanced function to get company prefix from both FMS and ENQUIRY TO ORDER sheets
 export const getCompanyPrefix = async (companyName) => {
   const scriptUrl =
-    "https://script.google.com/macros/s/AKfycbzTPj_x_0Sh6uCNnMDi-KlwVzkGV3nC4tRF6kGUNA1vXG0Ykx4Lq6ccR9kYv6Cst108aQ/exec"
+    "https://script.google.com/macros/s/AKfycbyLTNpTAVKaVuGH_-GrVNxDOgXqbWiBYzdf8PQWWwIFhLiIz_1lT3qEQkl7BS1osfToGQ/exec"
 
   try {
     const params = {
@@ -136,7 +138,7 @@ function Quotation() {
       try {
         console.log("Fetching existing quotations...")
         const scriptUrl =
-          "https://script.google.com/macros/s/AKfycbzTPj_x_0Sh6uCNnMDi-KlwVzkGV3nC4tRF6kGUNA1vXG0Ykx4Lq6ccR9kYv6Cst108aQ/exec"
+          "https://script.google.com/macros/s/AKfycbyLTNpTAVKaVuGH_-GrVNxDOgXqbWiBYzdf8PQWWwIFhLiIz_1lT3qEQkl7BS1osfToGQ/exec"
         const response = await fetch(scriptUrl, {
           method: "POST",
           headers: {
@@ -223,7 +225,7 @@ function Quotation() {
 
     try {
       const scriptUrl =
-        "https://script.google.com/macros/s/AKfycbzTPj_x_0Sh6uCNnMDi-KlwVzkGV3nC4tRF6kGUNA1vXG0Ykx4Lq6ccR9kYv6Cst108aQ/exec"
+        "https://script.google.com/macros/s/AKfycbyLTNpTAVKaVuGH_-GrVNxDOgXqbWiBYzdf8PQWWwIFhLiIz_1lT3qEQkl7BS1osfToGQ/exec"
       const response = await fetch(scriptUrl, {
         method: "POST",
         headers: {
@@ -408,7 +410,7 @@ function Quotation() {
       const fileName = `Quotation_${finalQuotationNo}.pdf`
 
       const scriptUrl =
-        "https://script.google.com/macros/s/AKfycbzTPj_x_0Sh6uCNnMDi-KlwVzkGV3nC4tRF6kGUNA1vXG0Ykx4Lq6ccR9kYv6Cst108aQ/exec"
+        "https://script.google.com/macros/s/AKfycbyLTNpTAVKaVuGH_-GrVNxDOgXqbWiBYzdf8PQWWwIFhLiIz_1lT3qEQkl7BS1osfToGQ/exec"
 
       const pdfParams = {
         action: "uploadPDF",

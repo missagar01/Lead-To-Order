@@ -58,7 +58,7 @@ function DashboardCharts() {
         setIsLoading(true)
         
         // Fetch data from FMS sheet for leads and lead sources
-        const fmsUrl = "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=FMS"
+        const fmsUrl = "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=FMS"
         const fmsResponse = await fetch(fmsUrl)
         const fmsText = await fmsResponse.text()
         
@@ -69,7 +69,7 @@ function DashboardCharts() {
         const fmsData = JSON.parse(fmsJsonData)
         
         // Fetch data from Leads Tracker sheet for enquiries (where column E is "yes")
-        const leadsTrackerUrl = "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=Leads Tracker"
+        const leadsTrackerUrl = "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=Leads Tracker"
         const leadsTrackerResponse = await fetch(leadsTrackerUrl)
         const leadsTrackerText = await leadsTrackerResponse.text()
         
@@ -80,7 +80,7 @@ function DashboardCharts() {
         const leadsTrackerData = JSON.parse(leadsTrackerJsonData)
         
         // Fetch data from Enquiry Tracker sheet for orders
-        const enquiryUrl = "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=Enquiry Tracker"
+        const enquiryUrl = "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=Enquiry Tracker"
         const enquiryResponse = await fetch(enquiryUrl)
         const enquiryText = await enquiryResponse.text()
         
@@ -91,7 +91,7 @@ function DashboardCharts() {
         const enquiryData = JSON.parse(enquiryJsonData)
         
         // Fetch data from Make Quotation sheet for quotations
-        const quotationUrl = "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=Make Quotation"
+        const quotationUrl = "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=Make Quotation"
         const quotationResponse = await fetch(quotationUrl)
         const quotationText = await quotationResponse.text()
         
@@ -126,7 +126,7 @@ function DashboardCharts() {
             fmsData.table.rows.forEach(row => {
                 if (row.c && row.c[0] && row.c[0].v && row.c[1] && row.c[1].v) {
                     // Get the assigned user from column CH (index 88)
-                    const assignedUser = row.c[88] ? row.c[88].v : ""
+                    const assignedUser = row.c[41] ? row.c[41].v : ""
                     
                     // Check if this row should be included based on user permissions
                     const shouldInclude = isAdmin() || (currentUser && assignedUser === currentUser.username)
@@ -170,7 +170,7 @@ function DashboardCharts() {
                 if (row.c && row.c[0] && row.c[0].v && row.c[4] && row.c[4].v && row.c[4].v.toString().toLowerCase() === "yes") {
                     // Assuming the Leads Tracker sheet has a user assignment column (adjust index as needed)
                     // Here, I'm assuming column Z (index 25) contains the username
-                    const assignedUser = row.c[25] ? row.c[25].v : ""
+                    const assignedUser = row.c[14] ? row.c[14].v : ""
                     
                     // Check if this row should be included based on user permissions
                     const shouldInclude = isAdmin() || (currentUser && assignedUser === currentUser.username)
@@ -211,10 +211,10 @@ function DashboardCharts() {
             
             // Count orders from Enquiry Tracker sheet (filtering by user)
             enquiryData.table.rows.forEach(row => {
-                if (row.c && row.c[0] && row.c[0].v && row.c[22] && row.c[22].v && row.c[22].v.toString().toLowerCase() === "yes") {
+                if (row.c && row.c[0] && row.c[0].v && row.c[15] && row.c[15].v && row.c[15].v.toString().toLowerCase() === "yes") {
                     // Assuming the Enquiry Tracker sheet has a user assignment column (adjust index as needed)
                     // Here, I'm assuming column AJ (index 35) contains the username
-                    const assignedUser = row.c[35] ? row.c[35].v : ""
+                    const assignedUser = row.c[28] ? row.c[28].v : ""
                     
                     // Check if this row should be included based on user permissions
                     const shouldInclude = isAdmin() || (currentUser && assignedUser === currentUser.username)
@@ -280,7 +280,7 @@ function DashboardCharts() {
 
             const totalLeads = fmsData.table.rows.filter(row => {
               // Get the assigned user from column CH (index 88)
-              const assignedUser = row.c && row.c[88] ? row.c[88].v : ""
+              const assignedUser = row.c && row.c[56] ? row.c[56].v : ""
               
               // Check if this row should be included based on user permissions
               const shouldInclude = isAdmin() || (currentUser && assignedUser === currentUser.username)
@@ -292,7 +292,7 @@ function DashboardCharts() {
           // Count total enquiries from Leads Tracker where column E is "yes" (filtered by user)
           const totalEnquiries = leadsTrackerData.table.rows.filter(row => {
               // Assuming column Z (index 25) contains the username
-              const assignedUser = row.c && row.c[25] ? row.c[25].v : ""
+              const assignedUser = row.c && row.c[14] ? row.c[14].v : ""
               
               // Check if this row should be included based on user permissions
               const shouldInclude = isAdmin() || (currentUser && assignedUser === currentUser.username)
@@ -324,9 +324,9 @@ function DashboardCharts() {
               const shouldInclude = isAdmin() || (currentUser && assignedUser === currentUser.username)
               
               return row.c && 
-                     row.c[22] && 
-                     row.c[22].v && 
-                     row.c[22].v.toString().toLowerCase() === "yes" &&
+                     row.c[15] && 
+                     row.c[15].v && 
+                     row.c[15].v.toString().toLowerCase() === "yes" &&
                      shouldInclude
           }).length
           
@@ -371,7 +371,7 @@ if (fmsData && fmsData.table && fmsData.table.rows) {
   fmsData.table.rows.slice(2).forEach(row => {
       if (row.c && row.c[3] && row.c[3].v) {
           // Get the assigned user from column CH (index 88)
-          const assignedUser = row.c[88] ? row.c[88].v : ""
+          const assignedUser = row.c[56] ? row.c[56].v : ""
           
           // Check if this row should be included based on user permissions
           const shouldInclude = isAdmin() || (currentUser && assignedUser === currentUser.username)

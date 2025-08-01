@@ -38,7 +38,7 @@ function NewFollowUp() {
   const fetchDropdownData = async () => {
     try {
       const publicUrl =
-        "https://docs.google.com/spreadsheets/d/1TZVWkmASF7tG-QER17588sl4SvRgY7knFKFDtYFjB0Q/gviz/tq?tqx=out:json&sheet=DROPDOWN"
+        "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=DROPDOWN"
 
       const response = await fetch(publicUrl)
       const text = await response.text()
@@ -129,85 +129,35 @@ function NewFollowUp() {
       const currentDate = new Date()
       const formattedDate = formatDate(currentDate)
   
-      // Prepare base row data (columns A-E)
+      // Prepare items as JSON format
+      const itemsJson = JSON.stringify(items.map(item => ({
+        name: item.name || "",
+        quantity: item.quantity || "0"
+      })))
+  
+      // Prepare base row data with only the specified columns
       const rowData = [
-        formattedDate, // A: Current date
-        formData.leadNo, // B: Lead Number
-        document.getElementById("customerFeedback").value, // C: Customer feedback
-        leadStatus, // D: Hot/Cold/Warm status
-        enquiryStatus, // E: Enquiry Status
+        formattedDate, // Timestamp
+        formData.leadNo, // Lead No.
+        document.getElementById("customerFeedback").value, // What did the customer say?
+        leadStatus, // Lead Status
+        enquiryStatus, // Enquiry Received Status
+        enquiryStatus === "yes" ? document.getElementById("enquiryDate").value : "", // Enquiry Received Date
+        enquiryStatus === "yes" ? formData.enquiryApproach : "", // Enquiry Approach
+        enquiryStatus === "yes" ? document.getElementById("enquiryValue").value : "", // Enquiry Approximate Value
+        enquiryStatus === "yes" ? itemsJson : "", // Item/Qty (JSON format)
+        enquiryStatus === "yes" ? calculateTotalQuantity().toString() : "", // Total qty
+        enquiryStatus === "expected" ? document.getElementById("nextAction").value : "", // Next Action
+        enquiryStatus === "expected" ? document.getElementById("nextCallDate").value : "", // Next Call Date
+        enquiryStatus === "expected" ? document.getElementById("nextCallTime").value : "", // Next Call Time
+        "" // Company Name (empty for now)
       ]
-  
-      // Handle different scenarios
-      if (enquiryStatus === "expected") {
-        // Explicitly add columns F-K as empty (6 empty columns)
-        rowData.push("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "")
-  
-        // Then add columns V, W, X
-        rowData.push(
-          document.getElementById("nextAction").value, // V: Next action
-          document.getElementById("nextCallDate").value, // W: Next call date
-          document.getElementById("nextCallTime").value, // X: Next call time
-        )
-      } 
-      else if (enquiryStatus === "yes") {
-        // Add columns F-K
-        rowData.push(
-          document.getElementById("enquiryDate").value, // F: Enquiry Received Date
-          document.getElementById("enquiryState").value, // G: Enquiry for State
-          document.getElementById("projectName").value, // H: Project Name (NOB)
-          document.getElementById("salesType").value, // I: Sales Type
-          formData.enquiryApproach, // J: Enquiry Approach
-          "", // K: Project Value (empty)
-        )
-  
-        // Handle first 5 items (columns L-U)
-        const first5Items = items.slice(0, 5)
-        
-        // Add first 5 items in pairs (name, quantity)
-        first5Items.forEach((item) => {
-          rowData.push(item.name || "") // Product category
-          rowData.push(item.quantity || "0") // Quantity (0 if null/empty)
-        })
-  
-        // If less than 5 items, fill remaining slots with empty values
-        const remainingSlots = 5 - first5Items.length
-        for (let i = 0; i < remainingSlots; i++) {
-          rowData.push("", "0") // Empty name and 0 quantity
-        }
-  
-        // Pad to reach column AB (index 27)
-        while (rowData.length < 27) {
-          rowData.push("")
-        }
-  
-        // Add tracking status in column AB (index 27)
-        rowData.push(document.getElementById("leadsTrackingStatus").value)
-  
-        // Handle items 6 and onwards as JSON in column AC (index 28)
-        if (items.length > 5) {
-          const additionalItems = items.slice(5).map(item => ({
-            name: item.name || "",
-            quantity: item.quantity || "0"
-          }))
-          rowData.push(JSON.stringify(additionalItems)) // Column AC
-        } else {
-          rowData.push("") // Empty if no additional items
-        }
-  
-        // Add total quantity in column AD (index 29)
-        rowData.push(calculateTotalQuantity().toString())
-        
-      } else if (enquiryStatus === "not-interested") {
-        // Pad columns F-K and then V-X with empty values
-        rowData.push("", "", "", "", "", "", "", "", "")
-      }
   
       console.log("Row Data to be submitted:", rowData)
   
       // Script URL - replace with your Google Apps Script URL
       const scriptUrl =
-        "https://script.google.com/macros/s/AKfycbzTPj_x_0Sh6uCNnMDi-KlwVzkGV3nC4tRF6kGUNA1vXG0Ykx4Lq6ccR9kYv6Cst108aQ/exec"
+        "https://script.google.com/macros/s/AKfycbyLTNpTAVKaVuGH_-GrVNxDOgXqbWiBYzdf8PQWWwIFhLiIz_1lT3qEQkl7BS1osfToGQ/exec"
   
       // Parameters for Google Apps Script
       const params = {
@@ -329,12 +279,12 @@ function NewFollowUp() {
                     id="hot"
                     name="leadStatus"
                     value="hot"
-                    checked={leadStatus === "Relevant"}
-                    onChange={() => setLeadStatus("Relevant")}
+                    checked={leadStatus === "Hot"}
+                    onChange={() => setLeadStatus("Hot")}
                     className="h-4 w-4 text-red-600 focus:ring-red-500"
                   />
                   <label htmlFor="hot" className="text-sm text-gray-700">
-                    Relevant
+                    Hot
                   </label>
                 </div>
                 <div className="flex items-center space-x-2">
@@ -343,28 +293,28 @@ function NewFollowUp() {
                     id="warm"
                     name="leadStatus"
                     value="warm"
-                    checked={leadStatus === "Not Relevant"}
-                    onChange={() => setLeadStatus("Not Relevant")}
+                    checked={leadStatus === "Warm"}
+                    onChange={() => setLeadStatus("Warm")}
                     className="h-4 w-4 text-amber-600 focus:ring-amber-500"
                   />
                   <label htmlFor="warm" className="text-sm text-gray-700">
-                    Not Relevant
+                    Warm
                   </label>
                 </div>
-                {/* <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2">
                   <input
                     type="radio"
                     id="cold"
                     name="leadStatus"
                     value="cold"
-                    checked={leadStatus === "cold"}
-                    onChange={() => setLeadStatus("cold")}
+                    checked={leadStatus === "Cold"}
+                    onChange={() => setLeadStatus("Cold")}
                     className="h-4 w-4 text-blue-600 focus:ring-blue-500"
                   />
                   <label htmlFor="cold" className="text-sm text-gray-700">
                     Cold
                   </label>
-                </div> */}
+                </div>
               </div>
             </div>
 
@@ -477,60 +427,6 @@ function NewFollowUp() {
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="enquiryState" className="block text-sm font-medium text-gray-700">
-                      Enquiry for State
-                    </label>
-                    <select
-                      id="enquiryState"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
-                      required
-                    >
-                      <option value="">Select state</option>
-                      {enquiryStates.map((state, index) => (
-                        <option key={index} value={state}>
-                          {state}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label htmlFor="projectName" className="block text-sm font-medium text-gray-700">
-                      NOB
-                    </label>
-                    <select
-                      id="projectName"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
-                      required
-                    >
-                      <option value="">Select NOB</option>
-                      {nobOptions.map((nob, index) => (
-                        <option key={index} value={nob}>
-                          {nob}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label htmlFor="salesType" className="block text-sm font-medium text-gray-700">
-                      Enquiry Type
-                    </label>
-                    <select
-                      id="salesType"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
-                      required
-                    >
-                      <option value="">Select type</option>
-                      {salesTypes.map((type, index) => (
-                        <option key={index} value={type}>
-                          {type}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="space-y-2">
                     <label htmlFor="enquiryApproach" className="block text-sm font-medium text-gray-700">
                       Enquiry Approach
                     </label>
@@ -550,45 +446,18 @@ function NewFollowUp() {
                     </select>
                   </div>
 
-                  <div className="space-y-2">
-        <label htmlFor="leadsTrackingStatus" className="block text-sm font-medium text-gray-700">
-          Leads Tracking Status
-        </label>
-        <select
-          id="leadsTrackingStatus"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
-          required
-        >
-          <option value="">Select status</option>
-          <option value="Pending">Pending</option>
-          <option value="Completed">Completed</option>
-        </select>
-      </div>
-
-                  {/* <div className="space-y-2">
-                    <label htmlFor="requiredDate" className="block text-sm font-medium text-gray-700">
-                      Required Product Date
+                  <div className="space-y-2 md:col-span-2">
+                    <label htmlFor="enquiryValue" className="block text-sm font-medium text-gray-700">
+                      Enquiry Approximate Value
                     </label>
                     <input
-                      id="requiredDate"
-                      type="date"
+                      id="enquiryValue"
+                      type="number"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
+                      placeholder="Enter approximate value"
                       required
                     />
                   </div>
-
-                  <div className="space-y-2">
-                    <label htmlFor="projectValue" className="block text-sm font-medium text-gray-700">
-                      Project Approximate Value
-                    </label>
-                    <input
-                      id="projectValue"
-                      type="number"
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
-                      placeholder="Enter value"
-                      required
-                    />
-                  </div> */}
                 </div>
 
                 <div className="space-y-4">
@@ -607,25 +476,24 @@ function NewFollowUp() {
                   {items.map((item, index) => (
                     <div key={item.id} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
                       <div className="md:col-span-5 space-y-2">
-  <label htmlFor={`itemName-${item.id}`} className="block text-sm font-medium text-gray-700">
-    Item Name 1
-  </label>
-  <input
-    list={`item-options-${item.id}`}
-    id={`itemName-${item.id}`}
-    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
-    value={item.name}
-    onChange={(e) => updateItem(item.id, "name", e.target.value)}
-    required
-    placeholder="Select or type item name"
-  />
-  <datalist id={`item-options-${item.id}`}>
-    {productCategories.map((category, index) => (
-      <option key={index} value={category} />
-    ))}
-  </datalist>
-</div>
-
+                        <label htmlFor={`itemName-${item.id}`} className="block text-sm font-medium text-gray-700">
+                          Item Name
+                        </label>
+                        <input
+                          list={`item-options-${item.id}`}
+                          id={`itemName-${item.id}`}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
+                          value={item.name}
+                          onChange={(e) => updateItem(item.id, "name", e.target.value)}
+                          required
+                          placeholder="Select or type item name"
+                        />
+                        <datalist id={`item-options-${item.id}`}>
+                          {productCategories.map((category, index) => (
+                            <option key={index} value={category} />
+                          ))}
+                        </datalist>
+                      </div>
 
                       <div className="md:col-span-5 space-y-2">
                         <label htmlFor={`quantity-${item.id}`} className="block text-sm font-medium text-gray-700">

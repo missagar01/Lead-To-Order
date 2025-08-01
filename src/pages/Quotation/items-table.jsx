@@ -5,13 +5,10 @@ const ItemsTable = ({
     quotationData,
     handleItemChange,
     handleAddItem,
-    specialDiscount,
-    setSpecialDiscount,
     productCodes,
     productNames,
     productData,
     setQuotationData,
-    handleSpecialDiscountChange,
     isLoading,
     hiddenColumns,
     setHiddenColumns,
@@ -19,19 +16,15 @@ const ItemsTable = ({
 
   // Use props instead of local state
   const hideDisc = hiddenColumns?.hideDisc || false
-  const hideFlatDisc = hiddenColumns?.hideFlatDisc || false
-  const hideTotalFlatDisc = hiddenColumns?.hideTotalFlatDisc || false
-  const hideSpecialDiscount = hiddenColumns?.hideSpecialDiscount || false
 
   const calculateColSpan = () => {
     let baseSpan = 9
     if (hideDisc) baseSpan -= 1
-    if (hideFlatDisc) baseSpan -= 1
     return baseSpan.toString()
   }
 
-  // Calculate taxable amount properly (subtotal - totalFlatDiscount)
-  const taxableAmount = Math.max(0, quotationData.subtotal - quotationData.totalFlatDiscount)
+  // Calculate taxable amount (just subtotal now since no flat discounts)
+  const taxableAmount = quotationData.subtotal
 
   return (
     <div className="bg-white border rounded-lg p-4 shadow-sm">
@@ -45,24 +38,6 @@ const ItemsTable = ({
               onClick={() => setHiddenColumns(prev => ({ ...prev, hideDisc: !prev.hideDisc }))}
             >
               {hideDisc ? 'Show' : 'Hide'} Disc%
-            </button>
-            <button
-              className="px-2 py-1 border border-gray-300 rounded-md text-xs text-gray-700 hover:bg-gray-50"
-              onClick={() => setHiddenColumns(prev => ({ ...prev, hideFlatDisc: !prev.hideFlatDisc }))}
-            >
-              {hideFlatDisc ? 'Show' : 'Hide'} Flat Disc
-            </button>
-            <button
-              className="px-2 py-1 border border-gray-300 rounded-md text-xs text-gray-700 hover:bg-gray-50"
-              onClick={() => setHiddenColumns(prev => ({ ...prev, hideTotalFlatDisc: !prev.hideTotalFlatDisc }))}
-            >
-              {hideTotalFlatDisc ? 'Show' : 'Hide'} Total Flat Disc
-            </button>
-            <button
-              className="px-2 py-1 border border-gray-300 rounded-md text-xs text-gray-700 hover:bg-gray-50"
-              onClick={() => setHiddenColumns(prev => ({ ...prev, hideSpecialDiscount: !prev.hideSpecialDiscount }))}
-            >
-              {hideSpecialDiscount ? 'Show' : 'Hide'} Special Disc
             </button>
             <button
               className="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50"
@@ -92,7 +67,6 @@ const ItemsTable = ({
                 <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Units</th>
                 <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Rate</th>
                 {!hideDisc && <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Disc %</th>}
-                {!hideFlatDisc && <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Flat Disc</th>}
                 <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
                 <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
               </tr>
@@ -225,21 +199,6 @@ const ItemsTable = ({
                       />
                     </td>
                   )}
-                  {!hideFlatDisc && (
-                    <td className="px-4 py-2">
-                      <input
-                        type="number"
-                        value={item.flatDiscount}
-                        onChange={(e) =>
-                          handleItemChange(item.id, "flatDiscount", Number.parseFloat(e.target.value) || 0)
-                        }
-                        className="w-24 p-1 border border-gray-300 rounded-md"
-                        placeholder="0.00"
-                        min="0"
-                        disabled={isLoading}
-                      />
-                    </td>
-                  )}
                   <td className="px-4 py-2">
                     <input
                       type="number"
@@ -256,7 +215,6 @@ const ItemsTable = ({
                         if (newItems.length === 0) return
 
                         const subtotal = newItems.reduce((sum, i) => sum + i.amount, 0)
-                        const subtotalAfterDiscount = Math.max(0, subtotal - quotationData.totalFlatDiscount)
                         
                         let cgstAmount = 0
                         let sgstAmount = 0
@@ -264,12 +222,12 @@ const ItemsTable = ({
                         let total = 0
 
                         if (quotationData.isIGST) {
-                          igstAmount = Number((subtotalAfterDiscount * (quotationData.igstRate / 100)).toFixed(2))
-                          total = Number((subtotalAfterDiscount + igstAmount - (Number(specialDiscount) || 0)).toFixed(2))
+                          igstAmount = Number((subtotal * (quotationData.igstRate / 100)).toFixed(2))
+                          total = Number((subtotal + igstAmount).toFixed(2))
                         } else {
-                          cgstAmount = Number((subtotalAfterDiscount * (quotationData.cgstRate / 100)).toFixed(2))
-                          sgstAmount = Number((subtotalAfterDiscount * (quotationData.sgstRate / 100)).toFixed(2))
-                          total = Number((subtotalAfterDiscount + cgstAmount + sgstAmount - (Number(specialDiscount) || 0)).toFixed(2))
+                          cgstAmount = Number((subtotal * (quotationData.cgstRate / 100)).toFixed(2))
+                          sgstAmount = Number((subtotal * (quotationData.sgstRate / 100)).toFixed(2))
+                          total = Number((subtotal + cgstAmount + sgstAmount).toFixed(2))
                         }
 
                         setQuotationData({
@@ -300,20 +258,6 @@ const ItemsTable = ({
                 </td>
                 <td></td>
               </tr>
-              {!hideTotalFlatDisc && (
-                <tr>
-                  <td colSpan={calculateColSpan()} className="px-4 py-2 text-right font-medium">
-                    Total Flat Discount:
-                  </td>
-                  <td className="p-2">
-                    ₹
-                    {typeof quotationData.totalFlatDiscount === "number"
-                      ? quotationData.totalFlatDiscount.toFixed(2)
-                      : "0.00"}
-                  </td>
-                  <td></td>
-                </tr>
-              )}
               <tr className="border">
                 <td colSpan={calculateColSpan()} className="px-4 py-2 text-right font-medium">
                   Taxable Amount:
@@ -347,45 +291,22 @@ const ItemsTable = ({
                   </tr>
                 </>
               )}
-              {!hideSpecialDiscount && (
-                <tr>
-                  <td colSpan={calculateColSpan()} className="px-4 py-2 text-right font-medium">
-                    Special Discount:
-                  </td>
-                  <td className="px-4 py-2">
-                    <input
-                      type="number"
-                      value={specialDiscount}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setSpecialDiscount(value);
-                        handleSpecialDiscountChange(value);
-                      }}
-                      className="w-24 p-1 border border-gray-300 rounded-md"
-                      min="0"
-                      placeholder="0.00"
-                      disabled={isLoading}
-                    />
-                  </td>
-                  <td></td>
-                </tr>
-              )}
               <tr className="font-bold">
                 <td colSpan={calculateColSpan()} className="px-4 py-2 text-right">
                   Grand Total:
                 </td>
                 <td className="px-4 py-2">
                   ₹{(() => {
-                    const taxableAmt = Math.max(0, quotationData.subtotal - quotationData.totalFlatDiscount)
+                    const taxableAmt = quotationData.subtotal
                     let grandTotal = 0
                     
                     if (quotationData.isIGST) {
                       const igstAmt = taxableAmt * (quotationData.igstRate / 100)
-                      grandTotal = taxableAmt + igstAmt - (Number(specialDiscount) || 0)
+                      grandTotal = taxableAmt + igstAmt
                     } else {
                       const cgstAmt = taxableAmt * (quotationData.cgstRate / 100)
                       const sgstAmt = taxableAmt * (quotationData.sgstRate / 100)
-                      grandTotal = taxableAmt + cgstAmt + sgstAmt - (Number(specialDiscount) || 0)
+                      grandTotal = taxableAmt + cgstAmt + sgstAmt
                     }
                     
                     return Math.max(0, grandTotal).toFixed(2)

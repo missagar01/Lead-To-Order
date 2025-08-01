@@ -206,11 +206,11 @@ const QuotationPreview = ({
         <div className="mt-4 border-t pt-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="flex items-center justify-center p-6 rounded-lg border border-gray-200">
-              <img
+              {/* <img
                 src={imageform || "/placeholder.svg?height=200&width=300"}
                 alt="ManiQuip Logo"
                 className="max-h-100 w-auto object-contain"
-              />
+              /> */}
             </div>
 
             <div>

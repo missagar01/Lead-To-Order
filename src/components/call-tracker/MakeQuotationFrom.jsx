@@ -248,7 +248,7 @@ if (data && data.table && data.table.rows) {
                 className="hidden"
                 onChange={handleFileChange}
                 accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg"
-                required
+                // required
               />
             </label>
           </div>

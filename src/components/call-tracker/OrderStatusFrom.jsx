@@ -167,9 +167,9 @@ setCreditLimitOptions(["10000", "25000", "50000", "100000"])
                 row.c[1] && 
                 row.c[1].v && 
                 row.c[1].v.toString() === enquiryNo.toString() &&
-                row.c[60] && 
-                row.c[60].v) {
-              matchingQuotations.push(row.c[60].v)
+                row.c[35] && 
+                row.c[35].v) {
+              matchingQuotations.push(row.c[35].v)
             }
           })
         }
@@ -381,7 +381,7 @@ setCreditLimitOptions(["10000", "25000", "50000", "100000"])
               </select>
             </div>
 
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <label htmlFor="destination" className="block text-sm font-medium text-gray-700">
                 Destination
               </label>
@@ -393,7 +393,7 @@ setCreditLimitOptions(["10000", "25000", "50000", "100000"])
                 value={formData.destination || ""}
                 onChange={handleChange}
               />
-            </div>
+            </div> */}
 
             <div className="space-y-2">
               <label htmlFor="poNumber" className="block text-sm font-medium text-gray-700">
@@ -446,7 +446,7 @@ setCreditLimitOptions(["10000", "25000", "50000", "100000"])
   </select>
 </div>
 
-<div className="space-y-2">
+{/* <div className="space-y-2">
   <label htmlFor="creditDays" className="block text-sm font-medium text-gray-700">
     Credit Days
   </label>
@@ -480,7 +480,7 @@ setCreditLimitOptions(["10000", "25000", "50000", "100000"])
       <option key={index} value={option}>{option}</option>
     ))}
   </select>
-</div>
+</div> */}
 
             {/* <div className="space-y-2">
               <label htmlFor="conveyedForRegistration" className="block text-sm font-medium text-gray-700">

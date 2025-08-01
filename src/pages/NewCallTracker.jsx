@@ -398,18 +398,19 @@ const fetchLatestQuotationNumber = async (enquiryNo) => {
             orderStatusData.paymentMode, // Column R - Payment Mode
             orderStatusData.paymentTerms, // Column S - Payment Terms (In Days)
             orderStatusData.transportMode, // Column T - Transport Mode
-            orderStatusData.creditDays, // Column U - Credit Days
-            orderStatusData.creditLimit, // Column V - Credit Limit
-            orderStatusData.destination || "", // Column W - Destination
+            // orderStatusData.creditDays, // Column U - Credit Days
+            // orderStatusData.creditLimit, // Column V - Credit Limit
+            // orderStatusData.destination || "", // Column W - Destination
             orderStatusData.poNumber || "", // Column X - PO Number
             acceptanceFileUrl || "", // Column Y - Acceptance File Upload
             orderStatusData.orderRemark // Column Z - Remark
           );
           // Add empty values for NO columns (AA-AB) and HOLD columns (AC-AE)
-          rowData.push(...new Array(5).fill(""));
+          // rowData.push(...new Array(5).fill(""));
+          rowData.push(...new Array(7).fill(""), orderNumber);
         } else if (orderStatusData.orderStatus === "no") {
           // Add empty values for YES columns (P-Z)
-          rowData.push(...new Array(11).fill(""));
+          rowData.push(...new Array(8).fill(""));
           // Add NO data for columns AA-AB
           rowData.push(
             orderStatusData.reasonStatus, // Column AA - If No Then Get Relevant Reason Status
@@ -419,7 +420,7 @@ const fetchLatestQuotationNumber = async (enquiryNo) => {
           rowData.push(...new Array(3).fill(""));
         } else if (orderStatusData.orderStatus === "hold") {
           // Add empty values for YES columns (P-Z) and NO columns (AA-AB)
-          rowData.push(...new Array(13).fill(""));
+          rowData.push(...new Array(10).fill(""));
           // Add HOLD data for columns AC-AE
           rowData.push(
             orderStatusData.holdReason, // Column AC - Customer Order Hold Reason Category

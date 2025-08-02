@@ -7,6 +7,7 @@ const CallTrackerForm = ({ onClose = () => window.history.back() }) => {
   const [enquiryApproachOptions, setEnquiryApproachOptions] = useState([])
   const [receiverOptions, setReceiverOptions] = useState([])
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [itemNameOptions, setItemNameOptions] = useState([])
 
   const [formData, setFormData] = useState({
     leadSource: "",
@@ -45,6 +46,7 @@ const CallTrackerForm = ({ onClose = () => window.history.back() }) => {
         const sources = []        // Column B (Lead Sources)
         const approachOptions = [] // Column AM (index 38) - Enquiry Approach
         const receivers = []      // Column BW (index 74) - Enquiry Receiver Name Options
+        const itemNames = [] 
         
         // Skip the header row
         data.table.rows.slice(0).forEach(row => {
@@ -58,6 +60,10 @@ const CallTrackerForm = ({ onClose = () => window.history.back() }) => {
             if (row.c[38] && row.c[38].v) {
               approachOptions.push(row.c[38].v.toString())
             }
+
+            if (row.c[62] && row.c[62].v) {
+              itemNames.push(row.c[62].v.toString())
+            }
             
             // Column BW (Enquiry Receiver Name) - index 74
             if (row.c[74] && row.c[74].v) {
@@ -70,6 +76,7 @@ const CallTrackerForm = ({ onClose = () => window.history.back() }) => {
         setLeadSources([...new Set(sources.filter(Boolean))])
         setEnquiryApproachOptions([...new Set(approachOptions.filter(Boolean))])
         setReceiverOptions([...new Set(receivers.filter(Boolean))])
+        setItemNameOptions([...new Set(itemNames.filter(Boolean))])
       }
     } catch (error) {
       console.error("Error fetching dropdown values:", error)
@@ -77,6 +84,8 @@ const CallTrackerForm = ({ onClose = () => window.history.back() }) => {
       setLeadSources(["Website", "Justdial", "Sulekha", "Indiamart", "Referral", "Other"])
       setEnquiryApproachOptions(["Approach 1", "Approach 2", "Approach 3"])
       setReceiverOptions(["Receiver 1", "Receiver 2", "Receiver 3"])
+      // Add this line in the catch block after the existing fallback arrays:
+setItemNameOptions(["Item 1", "Item 2", "Item 3"])
     }
   }
 
@@ -383,17 +392,23 @@ const CallTrackerForm = ({ onClose = () => window.history.back() }) => {
             {items.map((item) => (
               <div key={item.id} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
                 <div className="md:col-span-5 space-y-2">
-                  <label htmlFor={`itemName-${item.id}`} className="block text-sm font-medium text-gray-700">
-                    Item Name
-                  </label>
-                  <input
-                    id={`itemName-${item.id}`}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    value={item.name}
-                    onChange={(e) => updateItem(item.id, "name", e.target.value)}
-                    required
-                  />
-                </div>
+  <label htmlFor={`itemName-${item.id}`} className="block text-sm font-medium text-gray-700">
+    Item Name
+  </label>
+  <input
+    id={`itemName-${item.id}`}
+    list={`itemNameList-${item.id}`}
+    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+    value={item.name}
+    onChange={(e) => updateItem(item.id, "name", e.target.value)}
+    required
+  />
+  <datalist id={`itemNameList-${item.id}`}>
+    {itemNameOptions.map((itemName, index) => (
+      <option key={index} value={itemName} />
+    ))}
+  </datalist>
+</div>
 
                 <div className="md:col-span-5 space-y-2">
                   <label htmlFor={`quantity-${item.id}`} className="block text-sm font-medium text-gray-700">

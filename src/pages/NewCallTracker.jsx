@@ -390,47 +390,54 @@ const fetchLatestQuotationNumber = async (enquiryNo) => {
         rowData.push("", "", "");
 
         // Based on order status, add data to appropriate columns
-        if (orderStatusData.orderStatus === "yes") {
-          // Add YES data for columns P-Z
-          rowData.push(
-            orderStatusData.orderStatus, // Column P - Is Order Received? Status
-            orderStatusData.acceptanceVia, // Column Q - Acceptance Via
-            orderStatusData.paymentMode, // Column R - Payment Mode
-            orderStatusData.paymentTerms, // Column S - Payment Terms (In Days)
-            orderStatusData.transportMode, // Column T - Transport Mode
-            // orderStatusData.creditDays, // Column U - Credit Days
-            // orderStatusData.creditLimit, // Column V - Credit Limit
-            // orderStatusData.destination || "", // Column W - Destination
-            orderStatusData.poNumber || "", // Column X - PO Number
-            acceptanceFileUrl || "", // Column Y - Acceptance File Upload
-            orderStatusData.orderRemark // Column Z - Remark
-          );
-          // Add empty values for NO columns (AA-AB) and HOLD columns (AC-AE)
-          // rowData.push(...new Array(5).fill(""));
-          rowData.push(...new Array(7).fill(""), orderNumber);
-        } else if (orderStatusData.orderStatus === "no") {
-          // Add empty values for YES columns (P-Z)
-          rowData.push(...new Array(8).fill(""));
-          // Add NO data for columns AA-AB
-          rowData.push(
-            orderStatusData.reasonStatus, // Column AA - If No Then Get Relevant Reason Status
-            orderStatusData.reasonRemark // Column AB - If No Then Get Relevant Reason Remark
-          );
-          // Add empty values for HOLD columns (AC-AE)
-          rowData.push(...new Array(3).fill(""));
-        } else if (orderStatusData.orderStatus === "hold") {
-          // Add empty values for YES columns (P-Z) and NO columns (AA-AB)
-          rowData.push(...new Array(10).fill(""));
-          // Add HOLD data for columns AC-AE
-          rowData.push(
-            orderStatusData.holdReason, // Column AC - Customer Order Hold Reason Category
-            orderStatusData.holdingDate, // Column AD - Holding Date
-            orderStatusData.holdRemark // Column AE - Hold Remark
-          );
-        } else {
-          // If no status selected, fill all columns with empty
-          rowData.push(...new Array(16).fill(""));
-        }
+        // Based on order status, add data to appropriate columns
+if (orderStatusData.orderStatus === "yes") {
+  // Add YES data for columns P-Z
+  rowData.push(
+    orderStatusData.orderStatus, // Column P - Is Order Received? Status
+    orderStatusData.acceptanceVia, // Column Q - Acceptance Via
+    orderStatusData.paymentMode, // Column R - Payment Mode
+    orderStatusData.paymentTerms, // Column S - Payment Terms (In Days)
+    orderStatusData.transportMode, // Column T - Transport Mode
+    // orderStatusData.creditDays, // Column U - Credit Days
+    // orderStatusData.creditLimit, // Column V - Credit Limit
+    // orderStatusData.destination || "", // Column W - Destination
+    orderStatusData.poNumber || "", // Column X - PO Number
+    acceptanceFileUrl || "", // Column Y - Acceptance File Upload
+    orderStatusData.orderRemark // Column Z - Remark
+  );
+  // Add empty values for NO columns (AA-AB) and HOLD columns (AC-AE)
+  // rowData.push(...new Array(5).fill(""));
+  rowData.push(...new Array(7).fill(""), orderNumber);
+} else if (orderStatusData.orderStatus === "no") {
+  // Add status first, then empty values for YES columns (Q-Z)
+  rowData.push(
+    orderStatusData.orderStatus, // Column P - Is Order Received? Status
+    ...new Array(7).fill("") // Empty values for columns Q-Z
+  );
+  // Add NO data for columns AA-AB
+  rowData.push(
+    orderStatusData.reasonStatus, // Column AA - If No Then Get Relevant Reason Status
+    orderStatusData.reasonRemark // Column AB - If No Then Get Relevant Reason Remark
+  );
+  // Add empty values for HOLD columns (AC-AE)
+  rowData.push(...new Array(3).fill(""));
+} else if (orderStatusData.orderStatus === "hold") {
+  // Add status first, then empty values for YES columns (Q-Z) and NO columns (AA-AB)
+  rowData.push(
+    orderStatusData.orderStatus, // Column P - Is Order Received? Status
+    ...new Array(9).fill("") // Empty values for columns Q-Z and AA-AB
+  );
+  // Add HOLD data for columns AC-AE
+  rowData.push(
+    orderStatusData.holdReason, // Column AC - Customer Order Hold Reason Category
+    orderStatusData.holdingDate, // Column AD - Holding Date
+    orderStatusData.holdRemark // Column AE - Hold Remark
+  );
+} else {
+  // If no status selected, fill all columns with empty
+  rowData.push(...new Array(16).fill(""));
+}
       } else {
         // Add empty values for all stage-specific columns (F-AE)
         rowData.push(...new Array(26).fill(""));

@@ -7,6 +7,7 @@ function Leads() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     receiverName: "",
+    scName: "",
     source: "",
     companyName: "",
     phoneNumber: "",
@@ -19,6 +20,7 @@ function Leads() {
     notes: ""
   })
   const [receiverNames, setReceiverNames] = useState([])
+  const [scNames, setScNames] = useState([])
   const [leadSources, setLeadSources] = useState([])
   const [companyOptions, setCompanyOptions] = useState([])
   const [companyDetailsMap, setCompanyDetailsMap] = useState({})
@@ -67,22 +69,28 @@ function Leads() {
       
       if (data && data.table && data.table.rows) {
         const receivers = []
+        const scNamesData = []
         const sources = []
         const states = []
         const nobs = []
         
         data.table.rows.slice(0).forEach(row => {
-          // Column A (receivers)
-          if (row.c && row.c[0] && row.c[0].v) {
-            receivers.push(row.c[0].v.toString())
+          // Column A (SC Names)
+          if (row.c && row.c[36] && row.c[36].v) {
+            scNamesData.push(row.c[36].v.toString())
           }
           
-          // Column B (sources)
+          // Column B (receivers) - moved from column A
           if (row.c && row.c[1] && row.c[1].v) {
-            sources.push(row.c[1].v.toString())
+            receivers.push(row.c[1].v.toString())
           }
           
-          // Column C (states)
+          // Column C (sources) - moved from column B
+          if (row.c && row.c[2] && row.c[2].v) {
+            sources.push(row.c[2].v.toString())
+          }
+          
+          // Column D (states) - moved from column C
           if (row.c && row.c[2] && row.c[2].v) {
             states.push(row.c[2].v.toString())
           }
@@ -93,6 +101,7 @@ function Leads() {
           }
         })
         
+        setScNames(scNamesData)
         setReceiverNames(receivers)
         setLeadSources(sources)
         setStateOptions(states)
@@ -101,6 +110,7 @@ function Leads() {
     } catch (error) {
       console.error("Error fetching dropdown values:", error)
       // Fallback to default values
+      setScNames(["SC-001", "SC-002", "SC-003"])
       setReceiverNames(["John Smith", "Sarah Johnson", "Michael Brown"])
       setLeadSources(["Indiamart", "Justdial", "Social Media", "Website", "Referral", "Other"])
       setStateOptions(["Andhra Pradesh", "Assam", "Bihar", "Delhi", "Gujarat", "Haryana", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Punjab", "Rajasthan", "Tamil Nadu", "Telangana", "Uttar Pradesh", "West Bengal"])
@@ -226,22 +236,23 @@ function Leads() {
       const formattedDate = formatDate(new Date())
       const leadNumber = await generateLeadNumber()
       
-      // Create row data with only the required fields
+      // Create row data with SC Name in column B
       const rowData = [
         formattedDate,        // Column A: Date
-        // leadNumber,           // Column B: Lead Number
-        "",
-        formData.receiverName, // Column C: Receiver Name
-        formData.source,      // Column D: Source
-        formData.companyName, // Column E: Company Name
-        formData.phoneNumber, // Column F: Phone Number
-        formData.salespersonName, // Column G: Salesperson Name
-        formData.location,    // Column H: Location
-        formData.email,       // Column I: Email
-        formData.state,       // Column J: State
-        formData.address,     // Column K: Address
-        formData.nob,         // Column U: Nature of Business
-        formData.notes        // Column AA: Notes
+        "",                   // Column C: Lead Number (empty as per original code)
+        formData.receiverName, // Column D: Receiver Name
+        formData.source,      // Column E: Source
+        formData.companyName, // Column F: Company Name
+        formData.phoneNumber, // Column G: Phone Number
+        formData.salespersonName, // Column H: Salesperson Name
+        formData.location,    // Column I: Location
+        formData.email,       // Column J: Email
+        formData.state,       // Column K: State
+        formData.address,     // Column L: Address
+        formData.nob,         // Column M: Nature of Business (adjusted position)
+        formData.notes,        // Column N: Notes (adjusted position)
+        "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+        formData.scName
       ]
 
       const params = {
@@ -271,6 +282,7 @@ function Leads() {
         // Reset form
         setFormData({
           receiverName: "",
+          scName: "",
           source: "",
           companyName: "",
           phoneNumber: "",
@@ -324,6 +336,24 @@ function Leads() {
                 >
                   <option value="">Select receiver</option>
                   {receiverNames.map((name, index) => (
+                    <option key={index} value={name}>{name}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="scName" className="block text-sm font-medium text-gray-700">
+                  SC Name
+                </label>
+                <select
+                  id="scName"
+                  value={formData.scName}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                >
+                  <option value="">Select SC Name</option>
+                  {scNames.map((name, index) => (
                     <option key={index} value={name}>{name}</option>
                   ))}
                 </select>
@@ -436,22 +466,26 @@ function Leads() {
                 </select>
               </div>
 
-              <div className="space-y-2">
-                <label htmlFor="nob" className="block text-sm font-medium text-gray-700">
-                  Nature of Business (NOB)
-                </label>
-                <select
-                  id="nob"
-                  value={formData.nob}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select nature of business</option>
-                  {nobOptions.map((option, index) => (
-                    <option key={index} value={option}>{option}</option>
-                  ))}
-                </select>
-              </div>
+             <div className="space-y-2">
+  <label htmlFor="nob" className="block text-sm font-medium text-gray-700">
+    Nature of Business (NOB)
+  </label>
+  <input
+    list="nob-options"
+    id="nob"
+    name="nob"
+    value={formData.nob}
+    onChange={handleChange}
+    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+    placeholder="Select or type nature of business"
+  />
+  <datalist id="nob-options">
+    {nobOptions.map((option, index) => (
+      <option key={index} value={option} />
+    ))}
+  </datalist>
+</div>
+
             </div>
 
             {/* Address Field */}

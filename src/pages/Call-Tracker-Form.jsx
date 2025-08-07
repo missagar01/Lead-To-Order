@@ -6,10 +6,12 @@ const CallTrackerForm = ({ onClose = () => window.history.back() }) => {
   const [leadSources, setLeadSources] = useState([])
   const [enquiryApproachOptions, setEnquiryApproachOptions] = useState([])
   const [receiverOptions, setReceiverOptions] = useState([])
+  const [scNames, setScNames] = useState([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [itemNameOptions, setItemNameOptions] = useState([])
 
   const [formData, setFormData] = useState({
+    scName: "",
     leadSource: "",
     companyName: "",
     phoneNumber: "",
@@ -43,6 +45,7 @@ const CallTrackerForm = ({ onClose = () => window.history.back() }) => {
       const data = JSON.parse(jsonData)
       
       if (data && data.table && data.table.rows) {
+        const scNamesData = []   // Column A (SC Names)
         const sources = []        // Column B (Lead Sources)
         const approachOptions = [] // Column AM (index 38) - Enquiry Approach
         const receivers = []      // Column BW (index 74) - Enquiry Receiver Name Options
@@ -51,6 +54,11 @@ const CallTrackerForm = ({ onClose = () => window.history.back() }) => {
         // Skip the header row
         data.table.rows.slice(0).forEach(row => {
           if (row.c) {
+            // Column A (SC Names)
+            if (row.c[36] && row.c[36].v) {
+              scNamesData.push(row.c[36].v.toString())
+            }
+            
             // Column B (Lead Sources)
             if (row.c[1] && row.c[1].v) {
               sources.push(row.c[1].v.toString())
@@ -73,6 +81,7 @@ const CallTrackerForm = ({ onClose = () => window.history.back() }) => {
         })
         
         // Update state with fetched values (using unique values to prevent duplicates)
+        setScNames([...new Set(scNamesData.filter(Boolean))])
         setLeadSources([...new Set(sources.filter(Boolean))])
         setEnquiryApproachOptions([...new Set(approachOptions.filter(Boolean))])
         setReceiverOptions([...new Set(receivers.filter(Boolean))])
@@ -81,6 +90,7 @@ const CallTrackerForm = ({ onClose = () => window.history.back() }) => {
     } catch (error) {
       console.error("Error fetching dropdown values:", error)
       // Fallback to default arrays if there's an error
+      setScNames(["SC-001", "SC-002", "SC-003"])
       setLeadSources(["Website", "Justdial", "Sulekha", "Indiamart", "Referral", "Other"])
       setEnquiryApproachOptions(["Approach 1", "Approach 2", "Approach 3"])
       setReceiverOptions(["Receiver 1", "Receiver 2", "Receiver 3"])
@@ -130,10 +140,10 @@ setItemNameOptions(["Item 1", "Item 2", "Item 3"])
       const currentDate = new Date()
     const formattedDate = formatDateToDDMMYYYY(currentDate)
 
-      // Prepare row data for columns C to K (indices 2-10)
+      // Prepare row data for columns C to L (indices 2-11)
       const rowData = []
       
-      // Add form data to columns C to K (indices 2-10)
+      // Add form data to columns C to L (indices 2-11)
       rowData.push(
         formattedDate,
         "",
@@ -157,6 +167,15 @@ setItemNameOptions(["Item 1", "Item 2", "Item 3"])
         }))
       
       rowData.push(JSON.stringify(itemsJson)) // Column L (index 11)
+
+      // Add empty placeholders to reach column AP (index 41)
+      // From column M (index 12) to AO (index 40) = 29 empty columns
+      for (let i = 0; i < 29; i++) {
+        rowData.push("")
+      }
+      
+      // Add SC Name to column AP (index 41)
+      rowData.push(formData.scName)
 
       console.log("Row Data to be submitted:", rowData)
 
@@ -237,6 +256,26 @@ setItemNameOptions(["Item 1", "Item 2", "Item 3"])
 
         <div className="p-6 space-y-6">
           <div className="space-y-4">
+            <div className="space-y-2">
+              <label htmlFor="scName" className="block text-sm font-medium text-gray-700">
+                SC Name
+              </label>
+              <select
+                id="scName"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                value={formData.scName}
+                onChange={(e) => setFormData({ ...formData, scName: e.target.value })}
+                required
+              >
+                <option value="">Select SC Name</option>
+                {scNames.map((name, index) => (
+                  <option key={index} value={name}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <div className="space-y-2">
               <label htmlFor="leadSource" className="block text-sm font-medium text-gray-700">
                 Lead Source

@@ -481,7 +481,7 @@ if (historyData && historyData.table && historyData.table.rows) {
           directEnquiryPendingData = []
 
           // Skip the header row (index 0)
-          directEnquiryData.table.rows.slice(6).forEach((row, index) => {
+          directEnquiryData.table.rows.slice(1).forEach((row, index) => {
             // Only show rows where column AH (index 37) is not null and column AI (index 38) is null
             if (row.c && row.c[12] && row.c[12].v && (!row.c[13] || !row.c[13].v)) {
               // Get the assigned user from column BX (index 75)
@@ -493,7 +493,7 @@ if (historyData && historyData.table && historyData.table.rows) {
               if (shouldInclude) {
                 const directEnquiryItem = {
                   id: index + 1,
-                   timestamp: row.c[26] ? formatDateToDDMMYYYY(row.c[26].v) : "", // Column AL - Timestamp
+                  timestamp: row.c[0] ? formatDateToDDMMYYYY(row.c[0].v) : "", // Column AL - Timestamp
                   leadId: row.c[1] ? row.c[1].v : "", // Column B - Lead Number
                   receiverName: row.c[2] ? row.c[2].v : "", // Column C - Lead Receiver Name
                   leadSource: row.c[3] ? row.c[3].v : "", // Column D - Lead Source

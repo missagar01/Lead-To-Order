@@ -86,8 +86,8 @@ function Leads() {
           }
           
           // Column C (sources) - moved from column B
-          if (row.c && row.c[2] && row.c[2].v) {
-            sources.push(row.c[2].v.toString())
+          if (row.c && row.c[1] && row.c[1].v) {
+            sources.push(row.c[1].v.toString())
           }
           
           // Column D (states) - moved from column C

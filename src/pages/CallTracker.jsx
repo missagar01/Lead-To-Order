@@ -1248,12 +1248,9 @@ const filterCounts = calculateFilterCounts();
                                 {tracker.assignedTo}
                               </td>
                             )}
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-  <div
-    className="min-w-[300px] break-words whitespace-normal"
-    title={formatItemQty(tracker.itemQty)}
-  >
-    {formatItemQty(tracker.itemQty)}
+<td className="px-6 py-4 text-sm text-gray-500 min-w-[250px] max-w-[400px]">
+  <div className="break-words whitespace-normal leading-relaxed">
+    {formatItemQty(tracker.itemQty) || "No items specified"}
   </div>
 </td>
                           </tr>

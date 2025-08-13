@@ -788,14 +788,14 @@ const handleGenerateLink = async () => {
             )}
           </button>
           <div className="space-x-2">
-            <button
+            {/* <button
               className="border border-gray-300 hover:bg-gray-50 px-4 py-2 rounded-md flex items-center inline-flex"
               onClick={handleGenerateLink}
               disabled={isGenerating || isSubmitting}
             >
               <ShareIcon className="h-4 w-4 mr-2" />
               Generate Link
-            </button>
+            </button> */}
             <button
               className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md flex items-center inline-flex"
               onClick={handleGeneratePDF}

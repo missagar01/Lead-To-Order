@@ -173,7 +173,7 @@ const ConsigneeDetails = ({
             <label className="block text-sm font-medium">GSTIN</label>
             <input
               type="text"
-              value={quotationData.consigneeGSTIN}
+              // value={quotationData.consigneeGSTIN}
               onChange={(e) => handleInputChange("consigneeGSTIN", e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md"
             />

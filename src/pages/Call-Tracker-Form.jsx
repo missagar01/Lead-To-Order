@@ -9,7 +9,10 @@ const CallTrackerForm = ({ onClose = () => window.history.back() }) => {
   const [scNames, setScNames] = useState([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [itemNameOptions, setItemNameOptions] = useState([])
-
+  const [companyOptions, setCompanyOptions] = useState([]);
+  const [locationOptions, setLocationOptions] = useState([]);
+  const [companyLocationMap, setCompanyLocationMap] = useState({}); // 👈 mapping ke liye
+  const [manualCompany, setManualCompany] = useState(""); // manual input ke liye
   const [formData, setFormData] = useState({
     scName: "",
     leadSource: "",
@@ -33,71 +36,110 @@ const CallTrackerForm = ({ onClose = () => window.history.back() }) => {
   // Function to fetch dropdown data from DROPDOWN sheet
   const fetchDropdownData = async () => {
     try {
-      const publicUrl = "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=DROPDOWN"
-      
-      const response = await fetch(publicUrl)
-      const text = await response.text()
-      
-      const jsonStart = text.indexOf('{')
-      const jsonEnd = text.lastIndexOf('}') + 1
-      const jsonData = text.substring(jsonStart, jsonEnd)
-      
-      const data = JSON.parse(jsonData)
-      
+      const publicUrl =
+        "https://docs.google.com/spreadsheets/d/1bLTwtlHUmADSOyXJBxQJ2sxEy-dII8v2aGCDYuqppx4/gviz/tq?tqx=out:json&sheet=DROPDOWN";
+
+      const response = await fetch(publicUrl);
+      const text = await response.text();
+
+      const jsonStart = text.indexOf("{");
+      const jsonEnd = text.lastIndexOf("}") + 1;
+      const jsonData = text.substring(jsonStart, jsonEnd);
+
+      const data = JSON.parse(jsonData);
+
       if (data && data.table && data.table.rows) {
-        const scNamesData = []   // Column A (SC Names)
-        const sources = []        // Column B (Lead Sources)
-        const approachOptions = [] // Column AM (index 38) - Enquiry Approach
-        const receivers = []      // Column BW (index 74) - Enquiry Receiver Name Options
-        const itemNames = [] 
-        
-        // Skip the header row
-        data.table.rows.slice(0).forEach(row => {
+        const companyNames = []; // Column 49 (Company Name)
+        const locations = []; // Column 54 (Location)
+        const mapping = {}; // Company → Location map
+
+        const scNamesData = []; // Column 36
+        const sources = []; // Column 1 (Lead Sources)
+        const approachOptions = []; // Column 38
+        const receivers = []; // Column 74
+        const itemNames = []; // Column 62
+
+        data.table.rows.forEach((row) => {
           if (row.c) {
-            // Column A (SC Names)
-            if (row.c[36] && row.c[36].v) {
-              scNamesData.push(row.c[36].v.toString())
-            }
-            
-            // Column B (Lead Sources)
-            if (row.c[1] && row.c[1].v) {
-              sources.push(row.c[1].v.toString())
-            }
-            
-            // Column AM (Enquiry Approach) - index 38
-            if (row.c[38] && row.c[38].v) {
-              approachOptions.push(row.c[38].v.toString())
+            // Column 49 → Company Name (index 48)
+            const company = row.c[49]?.v?.toString();
+            // Column 54 → Location (index 53)
+            const location = row.c[54]?.v?.toString();
+
+            if (company) companyNames.push(company);
+            if (location) locations.push(location);
+
+            if (company && location) {
+              mapping[company] = location; // 👈 Map company → location
             }
 
-            if (row.c[62] && row.c[62].v) {
-              itemNames.push(row.c[62].v.toString())
+            // Column 36 → SC Name
+            if (row.c[36] && row.c[36].v) {
+              scNamesData.push(row.c[36].v.toString());
             }
-            
-            // Column BW (Enquiry Receiver Name) - index 74
+
+            // Column 1 (Lead Sources)
+            if (row.c[1] && row.c[1].v) {
+              sources.push(row.c[1].v.toString());
+            }
+
+            // Column 38 → Enquiry Approach
+            if (row.c[38] && row.c[38].v) {
+              approachOptions.push(row.c[38].v.toString());
+            }
+
+            // Column 62 → Item Names
+            if (row.c[62] && row.c[62].v) {
+              itemNames.push(row.c[62].v.toString());
+            }
+
+            // Column 74 → Receiver
             if (row.c[74] && row.c[74].v) {
-              receivers.push(row.c[74].v.toString())
+              receivers.push(row.c[74].v.toString());
             }
           }
-        })
-        
-        // Update state with fetched values (using unique values to prevent duplicates)
-        setScNames([...new Set(scNamesData.filter(Boolean))])
-        setLeadSources([...new Set(sources.filter(Boolean))])
-        setEnquiryApproachOptions([...new Set(approachOptions.filter(Boolean))])
-        setReceiverOptions([...new Set(receivers.filter(Boolean))])
-        setItemNameOptions([...new Set(itemNames.filter(Boolean))])
+        });
+
+        // ✅ Update states
+        setCompanyOptions([...new Set(companyNames.filter(Boolean))]);
+        setLocationOptions([...new Set(locations.filter(Boolean))]);
+        setCompanyLocationMap(mapping);
+
+        setScNames([...new Set(scNamesData.filter(Boolean))]);
+        setLeadSources([...new Set(sources.filter(Boolean))]);
+        setEnquiryApproachOptions([...new Set(approachOptions.filter(Boolean))]);
+        setReceiverOptions([...new Set(receivers.filter(Boolean))]);
+        setItemNameOptions([...new Set(itemNames.filter(Boolean))]);
       }
     } catch (error) {
-      console.error("Error fetching dropdown values:", error)
-      // Fallback to default arrays if there's an error
-      setScNames(["SC-001", "SC-002", "SC-003"])
-      setLeadSources(["Website", "Justdial", "Sulekha", "Indiamart", "Referral", "Other"])
-      setEnquiryApproachOptions(["Approach 1", "Approach 2", "Approach 3"])
-      setReceiverOptions(["Receiver 1", "Receiver 2", "Receiver 3"])
-      // Add this line in the catch block after the existing fallback arrays:
-setItemNameOptions(["Item 1", "Item 2", "Item 3"])
+      console.error("Error fetching dropdown values:", error);
+
+      // ✅ Fallback values
+      setCompanyOptions(["Company 1", "Company 2", "Company 3"]);
+      setLocationOptions(["Location 1", "Location 2", "Location 3"]);
+      setCompanyLocationMap({
+        "Company 1": "Location 1",
+        "Company 2": "Location 2",
+        "Company 3": "Location 3",
+      });
+
+      setScNames(["SC-001", "SC-002", "SC-003"]);
+      setLeadSources([
+        "Website",
+        "Justdial",
+        "Sulekha",
+        "Indiamart",
+        "Referral",
+        "Other",
+      ]);
+      setEnquiryApproachOptions(["Approach 1", "Approach 2", "Approach 3"]);
+      setReceiverOptions(["Receiver 1", "Receiver 2", "Receiver 3"]);
+      setItemNameOptions(["Item 1", "Item 2", "Item 3"]);
     }
-  }
+  };
+
+
+
 
   // Function to handle adding a new item
   const addItem = () => {
@@ -138,11 +180,11 @@ setItemNameOptions(["Item 1", "Item 2", "Item 3"])
     setIsSubmitting(true)
     try {
       const currentDate = new Date()
-    const formattedDate = formatDateToDDMMYYYY(currentDate)
+      const formattedDate = formatDateToDDMMYYYY(currentDate)
 
       // Prepare row data for columns C to L (indices 2-11)
       const rowData = []
-      
+
       // Add form data to columns C to L (indices 2-11)
       rowData.push(
         formattedDate,
@@ -157,7 +199,7 @@ setItemNameOptions(["Item 1", "Item 2", "Item 3"])
         formData.enquiryDate ? formatDateToDDMMYYYY(formData.enquiryDate) : "", // Column J (index 9)
         formData.enquiryApproach       // Column K (index 10)
       )
-      
+
       // Add items as JSON in column L (index 11)
       const itemsJson = items
         .filter(item => item.name.trim() !== "" || item.quantity.trim() !== "") // Filter out empty items
@@ -165,7 +207,7 @@ setItemNameOptions(["Item 1", "Item 2", "Item 3"])
           name: item.name || "",
           quantity: item.quantity || "0"
         }))
-      
+
       rowData.push(JSON.stringify(itemsJson)) // Column L (index 11)
 
       // Add empty placeholders to reach column AP (index 41)
@@ -173,7 +215,7 @@ setItemNameOptions(["Item 1", "Item 2", "Item 3"])
       for (let i = 0; i < 29; i++) {
         rowData.push("")
       }
-      
+
       // Add SC Name to column AP (index 41)
       rowData.push(formData.scName)
 
@@ -181,7 +223,7 @@ setItemNameOptions(["Item 1", "Item 2", "Item 3"])
 
       // Submit data to Google Sheets using fetch
       const scriptUrl = "https://script.google.com/macros/s/AKfycbyLTNpTAVKaVuGH_-GrVNxDOgXqbWiBYzdf8PQWWwIFhLiIz_1lT3qEQkl7BS1osfToGQ/exec"
-      
+
       // Parameters for Google Apps Script
       const params = {
         sheetName: "ENQUIRY TO ORDER",
@@ -194,7 +236,7 @@ setItemNameOptions(["Item 1", "Item 2", "Item 3"])
       for (const key in params) {
         urlParams.append(key, params[key])
       }
-      
+
       // Send the data
       const response = await fetch(scriptUrl, {
         method: "POST",
@@ -205,7 +247,7 @@ setItemNameOptions(["Item 1", "Item 2", "Item 3"])
       })
 
       const result = await response.json()
-      
+
       if (result.success) {
         alert("Data submitted successfully!")
         onClose() // Close the form after successful submission
@@ -226,8 +268,8 @@ setItemNameOptions(["Item 1", "Item 2", "Item 3"])
         <div className="p-6 border-b">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-bold">New Call Tracker</h2>
-            <button 
-              type="button" 
+            <button
+              type="button"
               onClick={() => {
                 try {
                   onClose();
@@ -238,7 +280,7 @@ setItemNameOptions(["Item 1", "Item 2", "Item 3"])
                     modal.style.display = 'none';
                   }
                 }
-              }} 
+              }}
               className="text-gray-500 hover:text-gray-700"
             >
               <svg
@@ -300,14 +342,33 @@ setItemNameOptions(["Item 1", "Item 2", "Item 3"])
               <label htmlFor="companyName" className="block text-sm font-medium text-gray-700">
                 Company Name
               </label>
+
+              {/* Input with datalist (dropdown + free typing) */}
               <input
                 id="companyName"
+                list="companyNameList"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                 value={formData.companyName}
-                onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+                onChange={(e) => {
+                  const selectedCompany = e.target.value;
+                  const autoLocation = companyLocationMap[selectedCompany] || "";
+                  setFormData({
+                    ...formData,
+                    companyName: selectedCompany,
+                    location: autoLocation,
+                  });
+                }}
                 required
               />
+              <datalist id="companyNameList">
+                {companyOptions.map((name, index) => (
+                  <option key={index} value={name} />
+                ))}
+              </datalist>
             </div>
+
+
+
 
             <div className="space-y-2">
               <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
@@ -339,14 +400,23 @@ setItemNameOptions(["Item 1", "Item 2", "Item 3"])
               <label htmlFor="location" className="block text-sm font-medium text-gray-700">
                 Location
               </label>
-              <input
+              <select
                 id="location"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                 value={formData.location}
                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                 required
-              />
+              >
+                <option value="">-- Select Location --</option>
+                {locationOptions.map((loc, index) => (
+                  <option key={index} value={loc}>
+                    {loc}
+                  </option>
+                ))}
+              </select>
+
             </div>
+
 
             <div className="space-y-2">
               <label htmlFor="emailAddress" className="block text-sm font-medium text-gray-700">
@@ -431,23 +501,23 @@ setItemNameOptions(["Item 1", "Item 2", "Item 3"])
             {items.map((item) => (
               <div key={item.id} className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
                 <div className="md:col-span-5 space-y-2">
-  <label htmlFor={`itemName-${item.id}`} className="block text-sm font-medium text-gray-700">
-    Item Name
-  </label>
-  <input
-    id={`itemName-${item.id}`}
-    list={`itemNameList-${item.id}`}
-    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-    value={item.name}
-    onChange={(e) => updateItem(item.id, "name", e.target.value)}
-    required
-  />
-  <datalist id={`itemNameList-${item.id}`}>
-    {itemNameOptions.map((itemName, index) => (
-      <option key={index} value={itemName} />
-    ))}
-  </datalist>
-</div>
+                  <label htmlFor={`itemName-${item.id}`} className="block text-sm font-medium text-gray-700">
+                    Item Name
+                  </label>
+                  <input
+                    id={`itemName-${item.id}`}
+                    list={`itemNameList-${item.id}`}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    value={item.name}
+                    onChange={(e) => updateItem(item.id, "name", e.target.value)}
+                    required
+                  />
+                  <datalist id={`itemNameList-${item.id}`}>
+                    {itemNameOptions.map((itemName, index) => (
+                      <option key={index} value={itemName} />
+                    ))}
+                  </datalist>
+                </div>
 
                 <div className="md:col-span-5 space-y-2">
                   <label htmlFor={`quantity-${item.id}`} className="block text-sm font-medium text-gray-700">

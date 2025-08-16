@@ -171,7 +171,7 @@ const ItemsTable = ({
                       <option value="Nos">Nos</option>
                       <option value="Pcs">Pcs</option>
                       <option value="Kg">Kg</option>
-                      <option value="Set">Set</option>
+                      <option value="Mt">Mt</option>
                     </select>
                   </td>
                   <td className="px-4 py-2">

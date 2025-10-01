@@ -515,9 +515,9 @@ function CallTracker() {
                   currentStage: row.c[15] ? row.c[15].v : "", // Column AQ - Current Stage
                   // callingDate: row.c[76] ? formatDateToDDMMYYYY(row.c[76].v) : "", // Column BY - Calling Date
                   callingDate1: row.c[42] ? formatDateToDDMMYYYY(row.c[42].v) : "", // Column BY - Calling Date as text
-
                   callingDate: row.c[42] ? String(row.c[42].v).toLowerCase() : "", // Column BY - Calling Date as text
                   itemQty: row.c[11] ? row.c[11].v : "",
+                  enquiryReceiverName: row.c[8] ? row.c[8].v : "",
                 }
 
                 directEnquiryPendingData.push(directEnquiryItem)
@@ -1309,6 +1309,12 @@ function CallTracker() {
                           scope="col"
                           className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
+                          Enquiry Receiver Name
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
                           Current Stage
                         </th>
                         <th
@@ -1367,6 +1373,9 @@ function CallTracker() {
                               >
                                 {tracker.leadSource}
                               </span>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              {tracker.enquiryReceiverName}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                               {tracker.currentStage}

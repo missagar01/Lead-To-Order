@@ -13,8 +13,10 @@ function MainNav({ logout }) {
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode)
-    // In a real app, you would apply dark mode classes to the document here
   }
+
+  // Your logo path - update this to match your logo file in public folder
+  const logoUrl = "/your-company-logo.png" // Replace with your actual logo path
 
   // Base routes available to all users
   let routes = [
@@ -49,36 +51,34 @@ function MainNav({ logout }) {
       active: location.pathname.startsWith("/quotation"),
     },
   ]
-  
-  // Add admin-only route if user is admin
-  // if (isAdmin && isAdmin()) {
-  //   routes.push({
-  //     href: "/admin",
-  //     label: "Admin",
-  //     icon: <ShieldIcon className="h-5 w-5 mr-2" />,
-  //     active: location.pathname.startsWith("/admin"),
-  //   });
-  // }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
       <div className="container mx-auto flex h-16 items-center px-4">
+        {/* Logo and Brand Section - Updated with logo */}
         <div className="mr-8 flex items-center">
-          <Link to="/" className="flex items-center">
-            <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <Link to="/" className="flex items-center space-x-3">
+            {/* Company Logo */}
+            <img
+              src="/logo.jpg"
+              alt="Company Logo"
+              className="h-14 w-18 object-contain" // Adjust size as needed
+            />
+            {/* Brand Name */}
+            <span className="text-m font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
               Leads To Order System
             </span>
           </Link>
         </div>
 
+        {/* Rest of your navigation code remains exactly the same */}
         <div className="hidden md:flex items-center space-x-1 flex-1">
           {routes.map((route) => (
             <Link
               key={route.href}
               to={route.href}
-              className={`flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                route.active ? "bg-slate-100 text-slate-900" : "text-slate-700 hover:bg-slate-100"
-              }`}
+              className={`flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${route.active ? "bg-slate-100 text-slate-900" : "text-slate-700 hover:bg-slate-100"
+                }`}
             >
               {route.icon}
               {route.label}
@@ -94,20 +94,15 @@ function MainNav({ logout }) {
                 {currentUser?.username || 'User'}
               </span>
               {userType && (
-                <span className={`px-2 py-1 text-xs rounded-full ${
-                  userType === 'admin' 
-                    ? 'bg-purple-100 text-purple-800' 
-                    : 'bg-blue-100 text-blue-800'
-                }`}>
+                <span className={`px-2 py-1 text-xs rounded-full ${userType === 'admin'
+                  ? 'bg-purple-100 text-purple-800'
+                  : 'bg-blue-100 text-blue-800'
+                  }`}>
                   {userType}
                 </span>
               )}
             </div>
           </div>
-{/* 
-          <button onClick={toggleDarkMode} className="p-2 rounded-full hover:bg-slate-100">
-            {darkMode ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
-          </button> */}
 
           <button
             onClick={logout}
@@ -125,6 +120,7 @@ function MainNav({ logout }) {
         </div>
       </div>
 
+      {/* Mobile menu remains exactly the same */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t">
           <div className="container mx-auto py-2 space-y-1 px-4">
@@ -135,24 +131,22 @@ function MainNav({ logout }) {
                   {currentUser?.username || 'User'}
                 </span>
                 {userType && (
-                  <span className={`mt-1 px-2 py-1 text-xs rounded-full w-fit ${
-                    userType === 'admin' 
-                      ? 'bg-purple-100 text-purple-800' 
-                      : 'bg-blue-100 text-blue-800'
-                  }`}>
+                  <span className={`mt-1 px-2 py-1 text-xs rounded-full w-fit ${userType === 'admin'
+                    ? 'bg-purple-100 text-purple-800'
+                    : 'bg-blue-100 text-blue-800'
+                    }`}>
                     {userType}
                   </span>
                 )}
               </div>
             </div>
-            
+
             {routes.map((route) => (
               <Link
                 key={route.href}
                 to={route.href}
-                className={`flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                  route.active ? "bg-slate-100 text-slate-900" : "text-slate-700 hover:bg-slate-100"
-                }`}
+                className={`flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${route.active ? "bg-slate-100 text-slate-900" : "text-slate-700 hover:bg-slate-100"
+                  }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {route.icon}

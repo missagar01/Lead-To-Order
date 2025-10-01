@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useContext } from "react"
-import { useNavigate } from "react-router-dom" 
+import { useNavigate } from "react-router-dom"
 import { AuthContext } from "../App"
 
 function Login() {
@@ -15,14 +15,14 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError("")
-    
+
     if (!username || !password) {
       setError("Please enter both username and password")
       return
     }
-    
+
     setIsLoading(true)
-    
+
     try {
       const success = await login(username, password)
       if (success) {
@@ -42,15 +42,22 @@ function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-slate-50 to-slate-100 p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+          <div className="flex justify-center mb-6">
+            <img
+              src="/logo.jpg" // Replace with your logo's path in the public folder
+              alt="Company Logo"
+              className="max-w-xs w-full h-auto" // Responsive styling
+            />
+          </div>
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
             Leads To Order System
           </h1>
-          <p className="text-slate-600">Sign in to access your dashboard</p>
+          {/* <p className="text-slate-600">Sign in to access your dashboard</p> */}
         </div>
 
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <div className="p-6">
-            <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+            <h2 className="text-xl font-bold mb-6 text-center">Login</h2>
 
             {error && <div className="mb-4 p-3 bg-red-100 border border-red-200 text-red-700 rounded-md">{error}</div>}
 
@@ -95,7 +102,7 @@ function Login() {
             </form>
 
             <div className="mt-4 text-center text-sm text-gray-600">
-              <p>Authenticate with your credentials from the Login sheet</p>
+              {/* <p>Authenticate with your credentials from the Login sheet</p> */}
             </div>
           </div>
         </div>

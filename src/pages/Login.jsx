@@ -42,21 +42,23 @@ function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-slate-50 to-slate-100 p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-10">
-          <div className="flex justify-center mb-6">
-            <img
-              src="/logo.jpg" // Replace with your logo's path in the public folder
-              alt="Company Logo"
-              className="max-w-xs w-full h-auto" // Responsive styling
-            />
-          </div>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
-            Leads To Order System
-          </h1>
+
+
           {/* <p className="text-slate-600">Sign in to access your dashboard</p> */}
         </div>
 
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <div className="p-6">
+          <div className="p-4">
+            <div className="flex justify-center mb-6">
+              <img
+                src="/logo.jpg" // Replace with your logo's path in the public folder
+                alt="Company Logo"
+                className="max-w-xs w-full h-auto" // Responsive styling
+              />
+            </div>
+            <h1 className="text-center text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+              Leads To Order System
+            </h1>
             <h2 className="text-xl font-bold mb-6 text-center">Login</h2>
 
             {error && <div className="mb-4 p-3 bg-red-100 border border-red-200 text-red-700 rounded-md">{error}</div>}

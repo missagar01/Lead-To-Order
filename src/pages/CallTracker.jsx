@@ -40,6 +40,7 @@ function CallTracker() {
     customerFeedback: true,
     currentStage: true,
     companyName: true,
+    salesPersonName: true,
     sendQuotationNo: true,
     quotationSharedBy: true,
     quotationNumber: true,
@@ -271,6 +272,7 @@ function CallTracker() {
     { key: "enquiryNo", label: "Enquiry No." },
     { key: "enquiryStatus", label: "Enquiry Status" },
     { key: "companyName", label: "Comapny Name" },
+    { key: "salesPersonName", label: "Sales Person Name" },
     { key: "customerFeedback", label: "What Did Customer Say" },
     { key: "currentStage", label: "Current Stage" },
     { key: "sendQuotationNo", label: "Send Quotation No." },
@@ -436,6 +438,7 @@ function CallTracker() {
                   enquiryNo: row.c[1] ? row.c[1].v : "", // Column B - Enquiry No
                   enquiryStatus: row.c[2] ? row.c[2].v : "", // Column C - Enquiry Status
                   companyName: row.c[31] ? row.c[31].v : "",
+                  salesPersonName: row.c[32] ? row.c[32].v : "",
                   customerFeedback: row.c[3] ? row.c[3].v : "", // Column D - What Did Customer Say
                   currentStage: row.c[4] ? row.c[4].v : "", // Column E - Current Stage
                   sendQuotationNo: row.c[5] ? row.c[5].v : "", // Column F - Send Quotation No
@@ -1425,6 +1428,9 @@ function CallTracker() {
                         {visibleColumns.companyName && (
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company Name</th>
                         )}
+                        {visibleColumns.salesPersonName && (
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sales Person Name</th>
+                        )}
                         {visibleColumns.customerFeedback && (
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">What Did Customer Say</th>
                         )}
@@ -1555,6 +1561,9 @@ function CallTracker() {
                             )}
                             {visibleColumns.companyName && (
                               <td className="px-6 py-4 text-sm text-gray-500 max-w-[200px] truncate" title={tracker.companyName}>{tracker.companyName}</td>
+                            )}
+                            {visibleColumns.salesPersonName && (
+                              <td className="px-6 py-4 text-sm text-gray-500 max-w-[200px] truncate" title={tracker.salesPersonName}>{tracker.salesPersonName}</td>
                             )}
                             {visibleColumns.customerFeedback && (
                               <td className="px-6 py-4 text-sm text-gray-500 max-w-[200px] truncate" title={tracker.customerFeedback}>{tracker.customerFeedback}</td>
